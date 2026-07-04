@@ -9,18 +9,18 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - BUILD: single /api/destination Gemini call, image-rich result page, Wikipedia image lookup+fallback, save/copy | FAKE: none (events reframed as evergreen "seasonal cultural moments", disclosed) | SKIP: map, live weather API, auth, DB, booking
 
 ## DONE (newest first: [hash] slice - how verified)
-- [pending commit] Phase 6+7 - weather/budget/mood chips wired into /api/destination (verified "spiritual"+"rainy" changed Bali's whyItFits text); Save Trip (localStorage) + Copy Itinerary (clipboard) buttons - tsc/eslint clean, / renders 200. Save/copy need Jay's click-QA (browser APIs, not curl-testable).
-- [cdbd7bf] Phase 5 - Wikipedia image lookup + fallback.
-- [749a217] Phase 4 - rich result page (8 sections, placeholders).
-- [1cefc53] Phase 3 - /api/destination route (replaces /api/gems).
+- [pending commit] Premium UI polish - Airbnb/Expedia-style hero collage, floating search card, big destination cards (lib/destinations.ts), loading skeleton, restyled result page (icons, category badges, story block, timeline itinerary). No changes to /api/destination - verified real Gemini call still works (Istanbul test) and DestinationImage untouched logically (only switched to cn() merge). tsc/eslint/build clean.
+- [2434143] Fixed Gemini config for the GitHub-connected Vercel project (hackathon2323) - added .env.example, gitignore exception, README instructions.
+- [f84ef89] Phase 6+7 - weather/budget/mood chips + Save Trip/Copy Itinerary.
+- [cdbd7bf]..[1cefc53] Phases 3-5 - /api/destination route, rich result page, Wikipedia image lookup+fallback.
 
 ## IN PROGRESS
-- Slice: none | Stage: Phase 8 complete
+- Slice: none | Stage: UI polish complete, ready for Jay's click-QA
 
 ## NEXT UP
-1. Jay adds GEMINI_API_KEY to the `hackathon2323` Vercel project (Settings -> Environment Variables) and redeploys - that's the GitHub-connected project, separate from `hackathon-base` which I configured via CLI and already works.
-2. Jay decides which of the 4 Vercel projects (hackathon-base, hackathon2323, warmup-cooking-app, warmup-cooking-app-t6lm) is the one to submit.
-3. Jay's own click-QA of golden path on the chosen deployed URL.
+1. Jay's click-QA of new UI on localhost, then redeploy to hackathon-base.
+2. Jay adds GEMINI_API_KEY to `hackathon2323` Vercel project if that's the one being submitted instead.
+3. Jay decides which of the 4 Vercel projects is the one to submit.
 
 ## BLOCKERS / QUESTIONS FOR JAY
 - GitHub auto-connect to Vercel failed during smoke test. Deploy works via direct CLI upload; pushes to GitHub won't auto-deploy yet. Revisit if auto-deploy-on-push wanted.

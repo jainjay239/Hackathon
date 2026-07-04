@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 export type GlanceType =
   | "hero"
@@ -69,7 +70,7 @@ export function DestinationImage({
   const showImage = Boolean(src) && !errored;
 
   return (
-    <div className={`relative w-full overflow-hidden rounded-lg ${className}`}>
+    <div className={cn("relative w-full overflow-hidden rounded-lg", className)}>
       {showImage ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
