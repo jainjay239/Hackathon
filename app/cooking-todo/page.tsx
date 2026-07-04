@@ -1,5 +1,5 @@
-﻿import { CookingTodoScaffold } from "./components/CookingTodoScaffold";
+import { CookingTodoApp } from "./components/CookingTodoApp";
 
 export default function CookingTodoPage() {
-  return <CookingTodoScaffold />;
+  return <CookingTodoApp />;
 }

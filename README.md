@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cooking Todo Gemini Planner
 
-## Getting Started
+A focused hackathon warm-up app that turns a user's daily routine into a practical one-day cooking plan. The app helps busy people decide what to cook, what to buy, what to substitute, and whether the plan fits their rough budget.
 
-First, run the development server:
+## What It Builds
+
+- Breakfast, lunch, and dinner plan for one day
+- Itemized grocery list with quantities and estimated costs
+- Ingredient substitutions for unavailable or expensive items
+- Budget feasibility analysis with saving tips
+
+## GenAI Usage Disclosure
+
+This app uses Google Gemini through the official `@google/genai` SDK. The Gemini call runs only on the server in `app/cooking-todo/actions.ts` through a Next.js server action.
+
+The user-entered day description is sent to Gemini. Gemini must return strict JSON with exactly these top-level sections: `mealPlan`, `groceryList`, `substitutions`, and `budgetFeasibilityAnalysis`. If Gemini is unavailable, misconfigured, empty, or returns malformed JSON, the app shows a clear error and does not display fake output.
+
+Environment variable required in `.env.local`:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+GEMINI_API_KEY=your_key_here
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+When the user does not specify budget or currency, the prompt defaults to Indian context, INR, and approximate Indian grocery price estimates.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Local Development
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Open `http://localhost:3000/cooking-todo`.
 
-To learn more about Next.js, take a look at the following resources:
+## Verification
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Manual acceptance path:
 
-## Deploy on Vercel
+1. Open `http://localhost:3000/cooking-todo`.
+2. Enter a daily routine with preferences, constraints, ingredients, and optional budget.
+3. Click `Generate plan`.
+4. Confirm the loading state appears.
+5. Confirm four sections render: meal plan, grocery list, substitutions, budget feasibility.
+6. If budget is not provided, confirm the result uses INR and approximate Indian grocery costs.
+7. If Gemini fails, confirm a clear error appears and no fake result is shown.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scope Boundaries
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- No database or persistence
+- No login or demo credentials
+- No external pricing APIs
+- No mock AI responses
+- No multi-day calendar

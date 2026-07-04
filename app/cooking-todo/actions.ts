@@ -1,4 +1,4 @@
-﻿"use server";
+"use server";
 
 import { GoogleGenAI, Type, type Schema } from "@google/genai";
 import type { CookingPlan, CookingPlanActionState } from "./types";
@@ -85,10 +85,9 @@ function isStringRecord(value: unknown): value is Record<string, unknown> {
 
 function hasOnlyTopLevelKeys(value: Record<string, unknown>) {
   const keys = Object.keys(value).sort();
-  return (
-    keys.length === REQUIRED_TOP_LEVEL_KEYS.length &&
-    keys.every((key, index) => key === [...REQUIRED_TOP_LEVEL_KEYS].sort()[index])
-  );
+  const expectedKeys = [...REQUIRED_TOP_LEVEL_KEYS].sort();
+
+  return keys.length === expectedKeys.length && keys.every((key, index) => key === expectedKeys[index]);
 }
 
 function isMealPlan(value: unknown) {
@@ -183,7 +182,7 @@ export async function generateCookingPlan(
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: `Create a practical one-day cooking plan from this user routine. Use realistic household grocery quantities and budget reasoning. Do not include medical, dietary, or nutrition claims. User routine: ${dayDescription}`,
+      contents: `Create a practical one-day cooking plan from this user routine. Use realistic household grocery quantities and budget reasoning. Do not include medical, dietary, or nutrition claims. Respect any budget or currency the user provides. If the user does not specify budget or currency, default to Indian context with INR, use the rupee symbol, and estimate using approximate Indian grocery prices. Always state that costs are approximate. User routine: ${dayDescription}`,
       config: {
         temperature: 0.3,
         responseMimeType: "application/json",

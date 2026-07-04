@@ -1,4 +1,4 @@
-﻿# STATE.md - Living Project State (max 40 lines, scoreboard not diary)
+# STATE.md - Living Project State (max 40 lines, scoreboard not diary)
 
 RULE: Update after EVERY verified slice, before the commit. This file wins over chat memory.
 
@@ -10,18 +10,20 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - SKIP: database, persistence, multi-day calendar, external pricing APIs, mock responses.
 
 ## DONE (newest first: [hash] slice - how verified)
-- [pending] Slice 1 scaffold + Gemini API plumbing - npm run lint, npm run build, /cooking-todo HTTP 200.
+- [pending] Slice 2 UI + rendering - npm run lint, npm run build, /cooking-todo HTTP 200, Gemini key smoke test returned four sections with rupee estimate.
+- [35b696d] Slice 1 scaffold + Gemini API plumbing - npm run lint, npm run build, /cooking-todo HTTP 200.
 
 ## IN PROGRESS
-- Slice: none | Stage: waiting for Jay approval
+- Slice: none | Stage: waiting for Jay screen QA
 
 ## NEXT UP
-1. Slice 2 - UI form, loading state, validation, and four-section response rendering.
+1. Jay screen QA on /cooking-todo, then deploy/review if accepted.
 
 ## BLOCKERS / QUESTIONS FOR JAY
-- Add GEMINI_API_KEY to .env.local before testing real AI generation.
+- (none)
 
 ## DECISIONS LOG (safe technical defaults - newest first)
+- 2026-07-04: Missing budget/currency defaults to Indian context, INR, approximate grocery prices.
 - 2026-07-04: Gemini key env var = GEMINI_API_KEY; no mock fallback allowed.
 - 2026-07-03: Pre-flight audit = GO (env/stack/git verified ready). Full detail in memory: prehackathon-audit-go.
 

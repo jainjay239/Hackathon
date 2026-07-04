@@ -1,0 +1,13 @@
+# CODEX-NOTES.md
+- Built `/cooking-todo` as an isolated Next.js App Router warm-up app.
+- Main UI: `app/cooking-todo/components/CookingTodoApp.tsx`.
+- Gemini server action: `app/cooking-todo/actions.ts`.
+- Shared response types: `app/cooking-todo/types.ts`.
+- Env var: `GEMINI_API_KEY` in `.env.local`, never committed.
+- Gemini uses `@google/genai` with `gemini-2.5-flash`.
+- Response is forced to JSON through `responseMimeType` and `responseSchema`.
+- Runtime validation rejects malformed or incomplete Gemini output.
+- No mock fallback exists; failures become user-facing errors.
+- If budget/currency is missing, prompt defaults to Indian context and INR.
+- No database, persistence, auth, external pricing, or calendar features.
+- Verify with `npm run lint`, `npm run build`, and `/cooking-todo` manual test.
