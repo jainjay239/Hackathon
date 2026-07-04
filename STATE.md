@@ -2,30 +2,32 @@
 
 RULE: Update after EVERY verified slice, before the commit. This file wins over chat memory.
 
-## Approved plan
-- Problem statement: Cooking Todo warm-up - AI meal planner from daily routine.
-- Core value proposition: Turn a daily routine into a practical 3-meal plan, grocery list, substitutions, and budget analysis.
-- Golden path: Open /cooking-todo, enter routine, generate Gemini plan, review four structured sections.
-- BUILD: isolated app/cooking-todo route, Gemini server action, accessible UI, README and CODEX notes.
-- SKIP: database, persistence, multi-day calendar, external pricing APIs, mock responses.
+## Approved plan (frozen after Jay approves - do not reinterpret)
+- Problem statement: PromptWars (Google) - GenAI travel/culture discovery platform
+- Core value proposition: traveler enters a destination -> Gemini surfaces hidden gems -> tap one -> Gemini generates immersive cultural story (+ heritage, local event, experience tip folded into same call)
+- Golden path: home -> type/pick destination -> gem cards (Gemini call 1) -> tap card -> story dialog (Gemini call 2)
+- BUILD: gems list, story/heritage/event/tip, save-to-trip (localStorage) | FAKE: gem "photo" = emoji/gradient, disclosed | SKIP: map, real events API, multi-language, auth
 
 ## DONE (newest first: [hash] slice - how verified)
-- [pending] Slice 2 UI + rendering - npm run lint, npm run build, /cooking-todo HTTP 200, Gemini key smoke test returned four sections with rupee estimate.
-- [35b696d] Slice 1 scaffold + Gemini API plumbing - npm run lint, npm run build, /cooking-todo HTTP 200.
+- [pending commit] Phase 1 - /api/gems route - tsc clean, eslint clean, curl POST returned 5 real Gemini gems for "Jaipur" (200), missing-destination returned clean 400.
 
 ## IN PROGRESS
-- Slice: none | Stage: waiting for Jay screen QA
+- Slice: none | Stage: ready for Phase 2
 
 ## NEXT UP
-1. Jay screen QA on /cooking-todo, then deploy/review if accepted.
+1. Phase 2 - home UI (search + gem card grid)
+2. Phase 3 - /api/story route
+3. Phase 4 - story dialog UI
+4. Phase 5 - save-to-trip + /my-trip
+5. Phase 6 - polish, README/GenAI disclosure, deploy
 
 ## BLOCKERS / QUESTIONS FOR JAY
 - (none)
 
 ## DECISIONS LOG (safe technical defaults - newest first)
-- 2026-07-04: Missing budget/currency defaults to Indian context, INR, approximate grocery prices.
-- 2026-07-04: Gemini key env var = GEMINI_API_KEY; no mock fallback allowed.
+- 2026-07-04: Cooking Todo (app/cooking-todo, commits 35b696d/5a90ed0/341c641) ruled stale/warm-up by Jay - not part of PromptWars. Left on disk untouched for now, cleanup planned Phase 6.
+- 2026-07-04: Gemini access via plain fetch to REST endpoint, no SDK dependency added.
 - 2026-07-03: Pre-flight audit = GO (env/stack/git verified ready). Full detail in memory: prehackathon-audit-go.
 
 ## DO NOT TOUCH
-- components/ui/*, .env.local, next.config.ts, unrelated interrupted audit edits.
+- components/ui/*, .env.local, next.config.ts, everything under DONE
