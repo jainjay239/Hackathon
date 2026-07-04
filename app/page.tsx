@@ -19,15 +19,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DestinationImage } from "@/components/destination-image";
+import { PreferenceFilters, type PreferenceFiltersValue } from "@/components/preference-filters";
 import { PRESET_DESTINATIONS } from "@/lib/destinations";
 import { formatItinerary } from "@/lib/formatters";
 import { mergeSavedTrip, parseSavedTrips, SAVED_TRIPS_KEY } from "@/lib/storage";
 import type { DestinationGuide, GlanceType } from "@/lib/types";
-import { toggleChipValue } from "@/lib/validation";
 
-const WEATHER_OPTIONS = ["Warm", "Cool", "Rainy"];
-const BUDGET_OPTIONS = ["Budget", "Mid-range", "Splurge"];
-const MOOD_OPTIONS = ["Chill", "Adventurous", "Spiritual", "Foodie"];
 const GLANCE_LABELS: Record<GlanceType, string> = {
   hero: "Highlight",
   heritage: "Heritage",
@@ -38,43 +35,15 @@ const GLANCE_LABELS: Record<GlanceType, string> = {
   experience: "Experience",
 };
 
-function PreferenceChips({
-  label,
-  options,
-  value,
-  onChange,
-}: {
-  label: string;
-  options: string[];
-  value: string;
-  onChange: (value: string) => void;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <span className="text-xs font-medium text-muted-foreground">{label}</span>
-      <div className="flex flex-wrap gap-1.5">
-        {options.map((option) => {
-          const selected = value === option;
-          return (
-            <button
-              key={option}
-              type="button"
-              onClick={() => onChange(toggleChipValue(value, option))}
-              aria-pressed={selected}
-              className={`rounded-full border px-3 py-1 text-xs font-medium transition-all ${
-                selected
-                  ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                  : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
-            >
-              {option}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
+const EMPTY_PREFERENCES: PreferenceFiltersValue = {
+  tripLength: "",
+  travelerType: "",
+  budget: "",
+  weather: "",
+  mood: "",
+  culturalInterests: [],
+  comfortNeeds: [],
+};
 
 function DestinationCard({
   name,
@@ -136,9 +105,7 @@ function LoadingGuide({ destination }: { destination: string }) {
 
 export default function Home() {
   const [destination, setDestination] = useState("");
-  const [weather, setWeather] = useState("");
-  const [budget, setBudget] = useState("");
-  const [mood, setMood] = useState("");
+  const [preferences, setPreferences] = useState<PreferenceFiltersValue>(EMPTY_PREFERENCES);
   const [guide, setGuide] = useState<DestinationGuide | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -173,7 +140,7 @@ export default function Home() {
       const res = await fetch("/api/destination", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ destination: trimmed, weather, budget, mood }),
+        body: JSON.stringify({ destination: trimmed, ...preferences }),
       });
       const data = await res.json();
 
@@ -235,11 +202,13 @@ export default function Home() {
                 </Button>
               </form>
 
-              <div className="mt-4 flex flex-wrap items-start gap-5 border-t border-border pt-4">
-                <PreferenceChips label="Weather" options={WEATHER_OPTIONS} value={weather} onChange={setWeather} />
-                <PreferenceChips label="Budget" options={BUDGET_OPTIONS} value={budget} onChange={setBudget} />
-                <PreferenceChips label="Mood" options={MOOD_OPTIONS} value={mood} onChange={setMood} />
+              <div className="mt-4 border-t border-border pt-4">
+                <PreferenceFilters value={preferences} onChange={setPreferences} disabled={loading} />
               </div>
+
+              <p className="mt-4 text-xs text-muted-foreground">
+                Gemini will build a culture-first guide from your preferences.
+              </p>
 
               {error && (
                 <p role="alert" className="mt-3 text-sm text-destructive">

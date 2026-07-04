@@ -9,22 +9,24 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - BUILD: single /api/destination Gemini call, image-rich result page, Wikipedia image lookup+fallback, save/copy | FAKE: none (events reframed as evergreen "seasonal cultural moments", disclosed) | SKIP: map, live weather API, auth, DB, booking
 
 ## DONE (newest first: [hash] slice - how verified)
-- [pending commit] Testing layer - extracted pure helpers (lib/types, validation, gemini-response, formatters, storage, imageFallback), 31 Vitest unit tests (no live Gemini calls), TESTING.md, README testing section, npm test/test:watch/verify scripts. Verified route + UI still work live after refactor (Oaxaca real call, empty-destination 400).
-- [be74c1c] Premium UI polish - hero collage, floating search card, big destination cards, loading skeleton, restyled result page.
+- [pending commit] Expanded discovery filters - tripLength, travelerType, culturalInterests (multi), comfortNeeds (multi) added to budget/weather/mood; lib/preferences.ts option lists; components/preference-filters.tsx (single+multi chip groups, collapsible "More cultural preferences"); Gemini prompt personalizes whyItFits/localExperiences/localEtiquette from all fields. Verified live (Kyoto: luxury+winter+couple+photographer+architecture/museums+low crowd all reflected in whyItFits). 36 tests pass, build clean.
+- [ea699aa] Testing layer - 31 Vitest tests, TESTING.md, npm test/verify scripts.
+- [be74c1c] Premium UI polish - hero collage, floating search card, big destination cards.
 - [2434143] Fixed Gemini config for the GitHub-connected Vercel project (hackathon2323).
-- [f84ef89]..[1cefc53] Phases 3-7 - /api/destination route, rich result page, Wikipedia image lookup+fallback, preference chips, Save Trip/Copy Itinerary.
+- [f84ef89]..[1cefc53] Phases 3-7 - /api/destination route, rich result page, image lookup+fallback, Save Trip/Copy Itinerary.
 
 ## IN PROGRESS
-- Slice: none | Stage: testing layer complete, ready for Jay's click-QA + redeploy
+- Slice: none | Stage: ready for Jay's click-QA + redeploy
 
 ## NEXT UP
-1. Jay's click-QA of UI on localhost, then redeploy to hackathon-base.
+1. Jay's click-QA of expanded filters on localhost, then redeploy to hackathon-base.
 2. Jay adds GEMINI_API_KEY to `hackathon2323` Vercel project if that's the one being submitted instead.
 3. Jay decides which of the 4 Vercel projects is the one to submit.
-4. Optional cleanup (not done, out of scope this round): package.json has unused @google/genai and @supabase/supabase-js deps left over from the earlier warm-up session.
+4. Optional cleanup (not done, out of scope): unused @google/genai and @supabase/supabase-js deps in package.json.
 
 ## BLOCKERS / QUESTIONS FOR JAY
-- GitHub auto-connect to Vercel failed during smoke test. Deploy works via direct CLI upload; pushes to GitHub won't auto-deploy yet. Revisit if auto-deploy-on-push wanted.
+- GitHub auto-connect to Vercel failed during smoke test. Deploy works via direct CLI upload; pushes to GitHub won't auto-deploy yet.
+- A separate OpenAI Codex process is currently running against this same repo folder (seen in process list) - two AI tools editing the same files concurrently risks clobbering, as happened earlier this session (stale audit-dashboard page, Cooking Todo route, second Vercel project). Worth checking what that session is doing.
 
 ## DECISIONS LOG (safe technical defaults - newest first)
 - 2026-07-04: Live smoke-tested Vercel deploy after Phase 5 (Jay's instruction) - prod URL https://hackathon-base-sage.vercel.app, GEMINI_API_KEY added to Vercel prod env, verified real Gemini call works live.

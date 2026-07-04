@@ -1,8 +1,15 @@
+const MAX_ARRAY_ITEMS = 10;
+const MAX_ITEM_LENGTH = 40;
+
 export interface DestinationRequest {
   destination: string;
+  tripLength: string;
+  travelerType: string;
   weather: string;
   budget: string;
   mood: string;
+  culturalInterests: string[];
+  comfortNeeds: string[];
 }
 
 export interface DestinationRequestError {
@@ -13,20 +20,35 @@ function readString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function readStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((item): item is string => typeof item === "string")
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0 && item.length <= MAX_ITEM_LENGTH)
+    .slice(0, MAX_ARRAY_ITEMS);
+}
+
 export function parseDestinationRequest(
   body: unknown
 ): DestinationRequest | DestinationRequestError {
   const record = (body ?? {}) as Record<string, unknown>;
   const destination = readString(record.destination);
-  const weather = readString(record.weather);
-  const budget = readString(record.budget);
-  const mood = readString(record.mood);
 
   if (!destination || destination.length > 100) {
     return { error: "destination is required (max 100 chars)" };
   }
 
-  return { destination, weather, budget, mood };
+  return {
+    destination,
+    tripLength: readString(record.tripLength),
+    travelerType: readString(record.travelerType),
+    weather: readString(record.weather),
+    budget: readString(record.budget),
+    mood: readString(record.mood),
+    culturalInterests: readStringArray(record.culturalInterests),
+    comfortNeeds: readStringArray(record.comfortNeeds),
+  };
 }
 
 export function isDestinationRequestError(
@@ -37,4 +59,10 @@ export function isDestinationRequestError(
 
 export function toggleChipValue(current: string, option: string): string {
   return current === option ? "" : option;
+}
+
+export function toggleArrayValue(current: string[], option: string): string[] {
+  return current.includes(option)
+    ? current.filter((item) => item !== option)
+    : [...current, option];
 }
