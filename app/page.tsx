@@ -1,65 +1,138 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+interface Gem {
+  name: string;
+  oneLiner: string;
+  category: string;
+  emoji: string;
+}
+
+const PRESET_DESTINATIONS = ["Jaipur", "Kyoto", "Oaxaca", "Lisbon"];
 
 export default function Home() {
+  const [destination, setDestination] = useState("");
+  const [gems, setGems] = useState<Gem[] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function discover(target: string) {
+    const trimmed = target.trim();
+    if (!trimmed) return;
+
+    setDestination(trimmed);
+    setLoading(true);
+    setError(null);
+    setGems(null);
+
+    try {
+      const res = await fetch("/api/gems", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ destination: trimmed }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error ?? "Something went wrong. Try again.");
+        return;
+      }
+
+      setGems(data.gems);
+    } catch {
+      setError("Could not reach the server. Check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="flex flex-1 flex-col items-center bg-background px-6 py-16">
+      <div className="flex w-full max-w-2xl flex-col items-center gap-6 text-center">
+        <h1 className="text-4xl font-semibold tracking-tight text-foreground">
+          Culture Compass
+        </h1>
+        <p className="max-w-md text-lg text-muted-foreground">
+          Enter a destination and discover hidden gems and the cultural
+          stories behind them, powered by Gemini.
+        </p>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            discover(destination);
+          }}
+          className="flex w-full max-w-md gap-2"
+        >
+          <Input
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}
+            placeholder="Try Jaipur, Kyoto, Oaxaca..."
+            aria-label="Destination"
+            disabled={loading}
+          />
+          <Button type="submit" disabled={loading || !destination.trim()}>
+            {loading ? "Discovering..." : "Discover"}
+          </Button>
+        </form>
+
+        <div className="flex flex-wrap justify-center gap-2">
+          {PRESET_DESTINATIONS.map((city) => (
+            <button
+              key={city}
+              type="button"
+              onClick={() => discover(city)}
+              disabled={loading}
+              className="rounded-full border border-border px-3 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-50"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+              {city}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-12 w-full max-w-4xl">
+        {error && (
+          <p role="alert" className="text-center text-sm text-destructive">
+            {error}
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        )}
+
+        {loading && (
+          <p className="text-center text-sm text-muted-foreground">
+            Asking Gemini for hidden gems in {destination}...
+          </p>
+        )}
+
+        {gems && gems.length > 0 && (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {gems.map((gem) => (
+              <Card key={gem.name}>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <span aria-hidden="true">{gem.emoji}</span>
+                    {gem.name}
+                  </CardTitle>
+                  <CardDescription>{gem.category}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-foreground/80">{gem.oneLiner}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
