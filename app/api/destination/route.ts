@@ -6,8 +6,13 @@ import {
   type DestinationRequest,
 } from "@/lib/validation";
 
-const GEMINI_MODEL = "gemini-2.5-flash";
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+const GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite"];
+const ATTEMPTS_PER_MODEL = 2;
+const RETRY_DELAY_MS = 800;
+
+function geminiUrl(model: string) {
+  return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+}
 
 function buildPrompt({
   destination,
@@ -77,44 +82,69 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
 
-  let geminiResponse: Response;
-  try {
-    geminiResponse = await fetch(GEMINI_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": apiKey,
-      },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: buildPrompt(parsed) }] }],
-        generationConfig: { responseMimeType: "application/json" },
-      }),
-    });
-  } catch {
-    return NextResponse.json({ error: "Could not reach Gemini API" }, { status: 502 });
+  const prompt = buildPrompt(parsed);
+  let lastError = "Could not reach Gemini API";
+  let firstTry = true;
+
+  for (const model of GEMINI_MODELS) {
+    for (let attempt = 0; attempt < ATTEMPTS_PER_MODEL; attempt++) {
+      if (!firstTry) {
+        await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+      }
+      firstTry = false;
+
+      let geminiResponse: Response;
+      try {
+        geminiResponse = await fetch(geminiUrl(model), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": apiKey,
+          },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { responseMimeType: "application/json" },
+          }),
+        });
+      } catch {
+        lastError = "Could not reach Gemini API";
+        continue;
+      }
+
+      if (geminiResponse.status === 429) {
+        lastError = `Gemini API error (${geminiResponse.status})`;
+        break;
+      }
+
+      if (!geminiResponse.ok) {
+        lastError = `Gemini API error (${geminiResponse.status})`;
+        continue;
+      }
+
+      const data = await geminiResponse.json();
+      const text: string | undefined = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!text) {
+        lastError = "Gemini returned no content";
+        continue;
+      }
+
+      let guide: unknown;
+      try {
+        guide = extractJson(text);
+      } catch {
+        lastError = "Gemini returned malformed JSON";
+        continue;
+      }
+
+      if (!isValidGuide(guide)) {
+        lastError = "Gemini response did not match expected shape";
+        continue;
+      }
+
+      return NextResponse.json(guide);
+    }
   }
 
-  if (!geminiResponse.ok) {
-    return NextResponse.json({ error: `Gemini API error (${geminiResponse.status})` }, { status: 502 });
-  }
-
-  const data = await geminiResponse.json();
-  const text: string | undefined = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-  if (!text) {
-    return NextResponse.json({ error: "Gemini returned no content" }, { status: 502 });
-  }
-
-  let guide: unknown;
-  try {
-    guide = extractJson(text);
-  } catch {
-    return NextResponse.json({ error: "Gemini returned malformed JSON" }, { status: 502 });
-  }
-
-  if (!isValidGuide(guide)) {
-    return NextResponse.json({ error: "Gemini response did not match expected shape" }, { status: 502 });
-  }
-
-  return NextResponse.json(guide);
+  return NextResponse.json({ error: lastError }, { status: 502 });
 }
