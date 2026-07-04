@@ -15,14 +15,15 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - [1cefc53] Phase 3 - /api/destination route (replaces /api/gems).
 
 ## IN PROGRESS
-- Slice: none | Stage: ready for Phase 8
+- Slice: Phase 8 | Stage: dead code removed, next is README + repo size check + final deploy
 
-## NEXT UP (revised plan, 60-min budget from 2026-07-04 approval)
-1. Phase 8 - cleanup (remove app/cooking-todo dead route), README, repo size check (git count-objects -vH), final Vercel deploy
+## NEXT UP
+1. README + GenAI disclosure
+2. Repo size check (git count-objects -vH)
+3. Final Vercel deploy + live smoke test
 
 ## BLOCKERS / QUESTIONS FOR JAY
-- GitHub auto-connect to Vercel failed during smoke test. Deploy works via direct CLI upload; pushes to GitHub won't auto-deploy yet. Revisit before final submission if auto-deploy-on-push wanted.
-- app/cooking-todo/ still live on deployed site as unrelated extra route. Flagged for removal in Phase 8.
+- GitHub auto-connect to Vercel failed during smoke test. Deploy works via direct CLI upload; pushes to GitHub won't auto-deploy yet. Revisit if auto-deploy-on-push wanted.
 
 ## DECISIONS LOG (safe technical defaults - newest first)
 - 2026-07-04: Live smoke-tested Vercel deploy after Phase 5 (Jay's instruction) - prod URL https://hackathon-base-sage.vercel.app, GEMINI_API_KEY added to Vercel prod env, verified real Gemini call works live.
