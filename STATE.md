@@ -9,21 +9,23 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - BUILD: single /api/destination Gemini call, image-rich result page, Wikipedia image lookup+fallback, save/copy | FAKE: none (events reframed as evergreen "seasonal cultural moments", disclosed) | SKIP: map, live weather API, auth, DB, booking
 
 ## DONE (newest first: [hash] slice - how verified)
-- [pending commit] Sidebar navigation + editorial layout + font fix - fixed real bug (--font-sans was self-referential, silently falling back to browser serif); Inter now wired correctly. New two-column result page: sticky sidebar (mobile: horizontal tabs) with 12 sections (overview/why-it-fits/sightseeing/food/locals/traditions/heritage/hidden-gems/festivals/experiences/etiquette/itinerary) derived from existing Gemini fields via lib/sections.ts (no schema break). Gemini prompt upgraded to warm consultant tone, verified live (Varanasi: senior-friendly+easy-walking+low-crowd+spiritual all reflected naturally in whyItFits). 40 tests pass, build clean.
+- [pending commit] Removed unused @google/genai and @supabase/supabase-js deps (never imported anywhere) - 45 packages dropped, tsc/eslint/test(40 pass)/build all clean.
+- [c46827f] Sidebar navigation + editorial layout + font fix (--font-sans bug, Inter wired correctly). 12-section two-column result page derived from existing Gemini fields (lib/sections.ts, no schema break). Gemini prompt upgraded to warm consultant tone.
 - [ad27039] Expanded discovery filters - tripLength, travelerType, culturalInterests, comfortNeeds.
 - [ea699aa]..[2434143] Testing layer, premium UI polish, Vercel config fix.
 - [f84ef89]..[1cefc53] Phases 3-7 - /api/destination route, rich result page, image lookup+fallback, Save Trip/Copy Itinerary.
 
 ## IN PROGRESS
-- Slice: none | Stage: ready for Jay's click-QA (sidebar scroll/active-state is the one thing not machine-verifiable) + redeploy
+- Slice: none | Stage: blocked on Jay's Gemini key (free-tier 20/day quota exhausted, two replacement keys so far still hit the same limit - likely same GCP project). Jay fixing key; sidebar click-QA also still pending on his side.
 
 ## NEXT UP
-1. Jay's click-QA of sidebar + new sections on localhost, then redeploy to hackathon-base.
-2. Jay decides which of the 4 Vercel projects is the one to submit (hackathon-base recommended, confirmed working).
-3. Optional cleanup (not done, out of scope): unused @google/genai and @supabase/supabase-js deps in package.json.
+1. Jay confirms new API key is under a genuinely different/new Google Cloud project (or enables billing) so quota actually resets.
+2. Jay's click-QA of sidebar + new sections once Gemini works again, then redeploy.
+3. Jay decides which of the 4 Vercel projects is the one to submit (hackathon-base recommended, confirmed working before quota ran out).
 
 ## BLOCKERS / QUESTIONS FOR JAY
-- A separate OpenAI Codex process was seen running against this same repo folder earlier - two AI tools editing the same files concurrently risks clobbering (already happened once this session). Worth checking if still active.
+- Gemini free-tier quota (20 requests/day/project) exhausted from testing today - blocks all live Gemini calls until Jay fixes it (new project or billing).
+- A separate OpenAI Codex process was seen running against this same repo folder earlier - worth checking if still active.
 
 ## DECISIONS LOG (safe technical defaults - newest first)
 - 2026-07-04: Sidebar sections derived from existing cultureAtAGlance/localExperiences tags (lib/sections.ts), not new Gemini fields - keeps schema backward-compatible per instruction.
