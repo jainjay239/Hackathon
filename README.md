@@ -43,10 +43,20 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+## Testing
+
+```bash
+npm test
+npm run verify
+```
+
+Tests do not call Gemini live - Gemini is tested through response validation and error handling on sample data, not real API calls. A manual testing checklist is available in `TESTING.md`.
+
 ## Verification
 
 ```bash
 npm run lint
+npm run test
 npm run build
 ```
 

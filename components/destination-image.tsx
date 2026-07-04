@@ -2,15 +2,10 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { buildWikipediaSearchUrl, extractWikipediaThumbnail } from "@/lib/imageFallback";
+import type { GlanceType } from "@/lib/types";
 
-export type GlanceType =
-  | "hero"
-  | "heritage"
-  | "food"
-  | "festival"
-  | "craft"
-  | "hiddenGem"
-  | "experience";
+export type { GlanceType };
 
 const CATEGORY_STYLES: Record<GlanceType, { emoji: string; gradient: string }> = {
   hero: { emoji: "🧭", gradient: "from-indigo-300 to-violet-400 dark:from-indigo-950 dark:to-violet-950" },
@@ -29,16 +24,11 @@ function useWikipediaImage(query: string) {
     let cancelled = false;
     if (!query) return;
 
-    const url = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=1&prop=pageimages&piprop=thumbnail&pithumbsize=800&format=json&origin=*`;
-
-    fetch(url)
+    fetch(buildWikipediaSearchUrl(query))
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (cancelled) return;
-        const pages = data?.query?.pages;
-        if (!pages) return;
-        const firstPage = Object.values(pages)[0] as { thumbnail?: { source?: string } } | undefined;
-        const thumbnail = firstPage?.thumbnail?.source;
+        const thumbnail = extractWikipediaThumbnail(data);
         if (thumbnail) setSrc(thumbnail);
       })
       .catch(() => {});

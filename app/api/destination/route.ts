@@ -1,39 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { extractJson, isValidGuide } from "@/lib/gemini-response";
+import { isDestinationRequestError, parseDestinationRequest } from "@/lib/validation";
 
 const GEMINI_MODEL = "gemini-2.5-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
-
-interface GlanceCard {
-  type: "heritage" | "food" | "festival" | "craft" | "hiddenGem" | "experience";
-  title: string;
-  description: string;
-  imageQuery: string;
-}
-
-interface HiddenGem {
-  name: string;
-  description: string;
-  imageQuery: string;
-}
-
-interface LocalExperience {
-  title: string;
-  description: string;
-}
-
-interface DestinationGuide {
-  destinationName: string;
-  country: string;
-  culturalIntro: string;
-  heroImageQuery: string;
-  whyItFits: string;
-  cultureAtAGlance: GlanceCard[];
-  hiddenGems: HiddenGem[];
-  immersiveStory: string;
-  localExperiences: LocalExperience[];
-  localEtiquette: string[];
-  itinerary: { morning: string; afternoon: string; evening: string };
-}
 
 function buildPrompt(destination: string, weather: string, budget: string, mood: string) {
   return `You are a knowledgeable local cultural guide for "${destination}", not a generic travel blogger. Write as someone who has lived there and loves its heritage, food, and traditions. Avoid generic filler phrases like "vibrant city" or "rich history" without specifics.
@@ -56,71 +26,24 @@ Return ONLY a JSON object, no markdown fences, no commentary, matching exactly t
 }`;
 }
 
-function extractJson(text: string): unknown {
-  const trimmed = text.trim().replace(/^```json/i, "").replace(/^```/, "").replace(/```$/, "").trim();
-  return JSON.parse(trimmed);
-}
-
-function isNonEmptyString(value: unknown): value is string {
-  return typeof value === "string" && value.length > 0;
-}
-
-function isValidGuide(data: unknown): data is DestinationGuide {
-  if (!data || typeof data !== "object") return false;
-  const guide = data as Record<string, unknown>;
-
-  if (
-    !isNonEmptyString(guide.destinationName) ||
-    !isNonEmptyString(guide.country) ||
-    !isNonEmptyString(guide.culturalIntro) ||
-    !isNonEmptyString(guide.heroImageQuery) ||
-    !isNonEmptyString(guide.whyItFits) ||
-    !isNonEmptyString(guide.immersiveStory)
-  ) {
-    return false;
-  }
-
-  if (!Array.isArray(guide.cultureAtAGlance) || guide.cultureAtAGlance.length === 0) return false;
-  if (!Array.isArray(guide.hiddenGems) || guide.hiddenGems.length === 0) return false;
-  if (!Array.isArray(guide.localExperiences) || guide.localExperiences.length === 0) return false;
-  if (!Array.isArray(guide.localEtiquette) || guide.localEtiquette.length === 0) return false;
-
-  const itinerary = guide.itinerary as Record<string, unknown> | undefined;
-  if (
-    !itinerary ||
-    !isNonEmptyString(itinerary.morning) ||
-    !isNonEmptyString(itinerary.afternoon) ||
-    !isNonEmptyString(itinerary.evening)
-  ) {
-    return false;
-  }
-
-  return true;
-}
-
 export async function POST(request: NextRequest) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "Server is missing GEMINI_API_KEY" }, { status: 500 });
   }
 
-  let destination = "";
-  let weather = "";
-  let budget = "";
-  let mood = "";
+  let body: unknown;
   try {
-    const body = await request.json();
-    destination = typeof body?.destination === "string" ? body.destination.trim() : "";
-    weather = typeof body?.weather === "string" ? body.weather.trim() : "";
-    budget = typeof body?.budget === "string" ? body.budget.trim() : "";
-    mood = typeof body?.mood === "string" ? body.mood.trim() : "";
+    body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  if (!destination || destination.length > 100) {
-    return NextResponse.json({ error: "destination is required (max 100 chars)" }, { status: 400 });
+  const parsed = parseDestinationRequest(body);
+  if (isDestinationRequestError(parsed)) {
+    return NextResponse.json({ error: parsed.error }, { status: 400 });
   }
+  const { destination, weather, budget, mood } = parsed;
 
   let geminiResponse: Response;
   try {

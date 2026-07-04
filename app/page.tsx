@@ -18,40 +18,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DestinationImage, type GlanceType } from "@/components/destination-image";
+import { DestinationImage } from "@/components/destination-image";
 import { PRESET_DESTINATIONS } from "@/lib/destinations";
-
-interface GlanceCard {
-  type: GlanceType;
-  title: string;
-  description: string;
-  imageQuery: string;
-}
-
-interface HiddenGem {
-  name: string;
-  description: string;
-  imageQuery: string;
-}
-
-interface LocalExperience {
-  title: string;
-  description: string;
-}
-
-interface DestinationGuide {
-  destinationName: string;
-  country: string;
-  culturalIntro: string;
-  heroImageQuery: string;
-  whyItFits: string;
-  cultureAtAGlance: GlanceCard[];
-  hiddenGems: HiddenGem[];
-  immersiveStory: string;
-  localExperiences: LocalExperience[];
-  localEtiquette: string[];
-  itinerary: { morning: string; afternoon: string; evening: string };
-}
+import { formatItinerary } from "@/lib/formatters";
+import { mergeSavedTrip, parseSavedTrips, SAVED_TRIPS_KEY } from "@/lib/storage";
+import type { DestinationGuide, GlanceType } from "@/lib/types";
+import { toggleChipValue } from "@/lib/validation";
 
 const WEATHER_OPTIONS = ["Warm", "Cool", "Rainy"];
 const BUDGET_OPTIONS = ["Budget", "Mid-range", "Splurge"];
@@ -87,7 +59,7 @@ function PreferenceChips({
             <button
               key={option}
               type="button"
-              onClick={() => onChange(selected ? "" : option)}
+              onClick={() => onChange(toggleChipValue(value, option))}
               aria-pressed={selected}
               className={`rounded-full border px-3 py-1 text-xs font-medium transition-all ${
                 selected
@@ -162,18 +134,6 @@ function LoadingGuide({ destination }: { destination: string }) {
   );
 }
 
-const SAVED_TRIPS_KEY = "cultureCompass.savedTrips";
-
-function formatItinerary(guide: DestinationGuide) {
-  return [
-    `${guide.destinationName}, ${guide.country} - 1-Day Cultural Itinerary`,
-    "",
-    `Morning: ${guide.itinerary.morning}`,
-    `Afternoon: ${guide.itinerary.afternoon}`,
-    `Evening: ${guide.itinerary.evening}`,
-  ].join("\n");
-}
-
 export default function Home() {
   const [destination, setDestination] = useState("");
   const [weather, setWeather] = useState("");
@@ -187,12 +147,8 @@ export default function Home() {
 
   function saveTrip() {
     if (!guide) return;
-    const existing = JSON.parse(localStorage.getItem(SAVED_TRIPS_KEY) ?? "[]");
-    const updated = [
-      ...existing.filter((trip: DestinationGuide) => trip.destinationName !== guide.destinationName),
-      guide,
-    ];
-    localStorage.setItem(SAVED_TRIPS_KEY, JSON.stringify(updated));
+    const existing = parseSavedTrips(localStorage.getItem(SAVED_TRIPS_KEY));
+    localStorage.setItem(SAVED_TRIPS_KEY, JSON.stringify(mergeSavedTrip(existing, guide)));
     setSaveStatus("saved");
     setTimeout(() => setSaveStatus("idle"), 2000);
   }
