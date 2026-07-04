@@ -2,15 +2,16 @@
 
 ## Automated Test Coverage Summary
 
-31 automated tests across 5 files, run with Vitest (`npm test`). No test calls the live Gemini API or requires a real `GEMINI_API_KEY` - everything tests pure, extracted logic with mock/sample data.
+40 automated tests across 6 files, run with Vitest (`npm test`). No test calls the live Gemini API or requires a real `GEMINI_API_KEY` - everything tests pure, extracted logic with mock/sample data.
 
 | Test file | What it checks |
 |---|---|
-| `lib/validation.test.ts` | Destination input validation (trims, requires non-empty, rejects >100 chars, rejects non-string, handles missing/null body) and weather/budget/mood chip toggle logic |
+| `lib/validation.test.ts` | Destination input validation (trims, requires non-empty, rejects >100 chars, rejects non-string, handles missing/null body), single-select and multi-select chip toggle logic, and sanitizing of the cultural interests / comfort needs arrays (drops non-strings, caps length and item size) |
 | `lib/gemini-response.test.ts` | Gemini response shape validation - accepts a well-formed guide, rejects null, rejects a guide missing a required field, rejects empty arrays, rejects an incomplete itinerary; also JSON extraction (plain JSON, markdown-fenced JSON, malformed JSON throws) |
 | `lib/formatters.test.ts` | Itinerary text formatting (destination, country, and all three time blocks appear correctly) |
 | `lib/imageFallback.test.ts` | Wikipedia image lookup URL construction and thumbnail extraction, including the fallback path (no pages, no thumbnail, null/undefined input all return `null` safely instead of throwing) |
 | `lib/storage.test.ts` | Save Trip logic - parsing saved trips from localStorage (including malformed JSON and non-array JSON), merging a new trip in, replacing an existing trip with the same destination name, keeping other saved trips intact |
+| `lib/sections.test.ts` | Sidebar category derivation from the existing Gemini response (food/heritage/traditions/festivals filtering by tag, food-keyword matching for local experiences) - confirms every sidebar section gets real content without needing new Gemini schema fields, and degrades to empty arrays (not errors) when a category has no matches |
 
 Run tests: `npm test`
 Watch mode: `npm run test:watch`
@@ -34,6 +35,11 @@ Full verification (lint + test + build): `npm run verify`
 - [x] Copy Itinerary works
 - [x] App builds successfully
 - [x] App works on Vercel after env variable is configured
+- [ ] Sidebar renders after result generation (desktop vertical nav + mobile horizontal tabs) - code verified (types, lint, build all clean) but needs a real browser click-through since it's client-state-driven and not curl-testable
+- [ ] Sidebar scrolls to correct sections and shows active state while scrolling - needs a real browser click-through (IntersectionObserver-based, not curl-testable)
+- [x] Food section shows food-related text and images (derived from `cultureAtAGlance` + keyword-matched local experiences)
+- [x] Traditions/Heritage/Hidden gems/Festivals sections show correctly-tagged content
+- [x] No old Cooking Todo references remain anywhere in source (`grep -ril "cooking-todo"` returns nothing)
 
 ## Golden Demo Path Tested
 
@@ -60,6 +66,10 @@ Both covered by unit tests on the underlying pure logic (`lib/storage.ts`, `lib/
 ## Mobile Responsiveness Check
 
 Manually checked at narrow viewport widths - destination cards and result sections collapse to a single column, the search card and chips wrap and remain usable, images keep their aspect ratio.
+
+## Typography Fix
+
+Found and fixed a real bug during this pass: `globals.css`'s `@theme inline` block mapped `--font-sans: var(--font-sans)` - a self-reference that never resolved, since the actually-loaded font variable was named `--font-geist-sans`. This silently made every `font-sans`/`font-heading` element fall back to the browser's default (serif) font the whole time, which is the root cause of the "old, government-department" look. Fixed by loading Inter with its `variable` set directly to `--font-sans`, confirmed live: the rendered `<html>` tag now carries the Inter font-loader class.
 
 ## Known Scope Boundaries
 

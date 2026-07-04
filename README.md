@@ -12,8 +12,9 @@ Travelers who want to engage with a destination's culture, not just book flights
 
 ## Key Features
 
-- Pick a destination (or type any city) plus weather, budget, and mood preferences
-- One real-time Gemini call generates a full cultural guide: intro, why-it-fits, culture-at-a-glance cards, hidden gems, an immersive story, local experiences, etiquette tips, and a 1-day culture-first itinerary
+- Pick a destination (or type any city) plus trip length, traveler type, budget, weather, mood, cultural interests, and comfort needs
+- One real-time Gemini call generates a full cultural guide, written like a warm local travel consultant rather than a generic blog: intro + story, why-it-fits, sightseeing, food, locals, traditions, heritage, hidden gems, festivals, experiences, etiquette, and a 1-day culture-first itinerary
+- Result page has a sticky sidebar (horizontal tabs on mobile) that smooth-scrolls to each category, so it reads like an explorable guide instead of one long report
 - Every card is illustrated with a real photo looked up live from Wikipedia; if no match is found, a designed gradient + emoji card is shown instead - never a broken image
 - Save a trip to your browser and copy the itinerary to your clipboard
 
