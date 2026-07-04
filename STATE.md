@@ -9,17 +9,16 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - BUILD: single /api/destination Gemini call, image-rich result page, Wikipedia image lookup+fallback, save/copy | FAKE: none (events reframed as evergreen "seasonal cultural moments", disclosed) | SKIP: map, live weather API, auth, DB, booking
 
 ## DONE (newest first: [hash] slice - how verified)
-- [pending commit] Phase 5 - components/destination-image.tsx: Wikipedia REST image lookup (keyless) + gradient/emoji fallback on no-match or load error - tsc/eslint clean, confirmed real thumbnail for "Jaipur Amber Fort" and clean empty response (safe fallback) for a nonsense query.
+- [pending commit] Phase 6+7 - weather/budget/mood chips wired into /api/destination (verified "spiritual"+"rainy" changed Bali's whyItFits text); Save Trip (localStorage) + Copy Itinerary (clipboard) buttons - tsc/eslint clean, / renders 200. Save/copy need Jay's click-QA (browser APIs, not curl-testable).
+- [cdbd7bf] Phase 5 - Wikipedia image lookup + fallback.
 - [749a217] Phase 4 - rich result page (8 sections, placeholders).
 - [1cefc53] Phase 3 - /api/destination route (replaces /api/gems).
 
 ## IN PROGRESS
-- Slice: none | Stage: ready for Phase 6
+- Slice: none | Stage: ready for Phase 8
 
 ## NEXT UP (revised plan, 60-min budget from 2026-07-04 approval)
-1. Phase 6 - weather/budget/mood preference chips
-2. Phase 7 - Save Trip + Copy Itinerary
-3. Phase 8 - cleanup (remove app/cooking-todo dead route), README, repo size check (git count-objects -vH), final Vercel deploy
+1. Phase 8 - cleanup (remove app/cooking-todo dead route), README, repo size check (git count-objects -vH), final Vercel deploy
 
 ## BLOCKERS / QUESTIONS FOR JAY
 - GitHub auto-connect to Vercel failed during smoke test. Deploy works via direct CLI upload; pushes to GitHub won't auto-deploy yet. Revisit before final submission if auto-deploy-on-push wanted.
