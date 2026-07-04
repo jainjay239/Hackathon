@@ -9,18 +9,18 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - BUILD: single /api/destination Gemini call, image-rich result page, Wikipedia image lookup+fallback, save/copy | FAKE: none (events reframed as evergreen "seasonal cultural moments", disclosed) | SKIP: map, live weather API, auth, DB, booking
 
 ## DONE (newest first: [hash] slice - how verified)
-- [pending commit] Score-improvement pass (evaluator: 83.87 -> 91.74, targeting Efficiency 80 and Code Quality 86, the two weakest) - moved `shadcn` CLI tool out of production deps into devDependencies (never imported at runtime), added `typecheck` script + folded into `verify`, added .github/workflows/ci.yml (lint+typecheck+test+build on every push). Audited for dead code/console.logs/`any` types/dangerouslySetInnerHTML - all clean already. npm run verify passes.
+- [pending commit] next/image conversion (Jay-approved, touches next.config.ts) - DestinationImage now uses next/image with fill+sizes instead of plain <img>, removed the eslint-disable it needed; next.config.ts whitelists upload.wikimedia.org. Verified via the Next.js image optimizer endpoint directly (200, image/jpeg) - no Gemini call needed. tsc/eslint/test(40 pass)/build all clean.
+- [3bee35a] Score-improvement pass (evaluator: 83.87 -> 91.74, targeting Efficiency 80 and Code Quality 86) - moved `shadcn` CLI tool to devDependencies, added typecheck script + CI workflow. Audited for dead code/`any`/dangerouslySetInnerHTML - already clean.
 - [1abbd2c] Removed unused @google/genai and @supabase/supabase-js deps.
 - [c46827f] Sidebar navigation + editorial layout + font fix (--font-sans bug, Inter wired correctly). 12-section two-column result page derived from existing Gemini fields (lib/sections.ts, no schema break). Gemini prompt upgraded to warm consultant tone.
 - [ad27039]..[1cefc53] Discovery filters, testing layer, premium UI polish, Vercel config fix, core Phases 3-7.
 
 ## IN PROGRESS
-- Slice: none | Stage: still blocked on Jay's Gemini key (3rd key tried, still hits the same 20/day free-tier quota - almost certainly still the same GCP project). Proposed next/image conversion for Efficiency/Code Quality (touches guarded next.config.ts) - awaiting Jay's go-ahead.
+- Slice: none | Stage: still blocked on Jay's Gemini key (3rd key tried, still hits the same 20/day free-tier quota - almost certainly still the same GCP project)
 
 ## NEXT UP
 1. Jay confirms new API key is under a genuinely different/new Google Cloud project (or enables billing) so quota actually resets.
-2. Jay's approval on next/image conversion (bigger Efficiency win, touches next.config.ts).
-3. Jay's click-QA of sidebar once Gemini works again, then redeploy.
+2. Jay's click-QA of sidebar + images once Gemini works again, then redeploy.
 
 ## BLOCKERS / QUESTIONS FOR JAY
 - Gemini free-tier quota (20/day/project) still exhausted after 3 key attempts - almost certainly the same underlying GCP project each time.

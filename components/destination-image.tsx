@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { buildWikipediaSearchUrl, extractWikipediaThumbnail } from "@/lib/imageFallback";
@@ -62,12 +63,13 @@ export function DestinationImage({
   return (
     <div className={cn("relative w-full overflow-hidden rounded-lg", className)}>
       {showImage ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={src ?? undefined}
+        <Image
+          src={src as string}
           alt={label}
+          fill
+          sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
           onError={() => setErrored(true)}
-          className="h-full w-full object-cover"
+          className="object-cover"
         />
       ) : (
         <div

@@ -59,6 +59,8 @@ Confirmed `GEMINI_API_KEY` must be set per-project in Vercel (Settings -> Enviro
 
 Verified directly against the Wikipedia API: a real query (e.g. "Jaipur Amber Fort") returns a usable thumbnail; a nonsense query returns no thumbnail, and `extractWikipediaThumbnail` returns `null` in that case (unit-tested), which the UI renders as a gradient + emoji card instead of a broken image.
 
+Images render via `next/image` (`upload.wikimedia.org` whitelisted in `next.config.ts`) for automatic lazy-loading and format optimization instead of a plain `<img>` tag. Verified the Next.js image optimizer endpoint directly serves a real Wikipedia thumbnail (200, `image/jpeg`) - this check needs no Gemini call.
+
 ## Save Trip and Copy Itinerary Checks
 
 Both covered by unit tests on the underlying pure logic (`lib/storage.ts`, `lib/formatters.ts`) plus manual click-through in the browser (localStorage persists across refresh, clipboard paste confirms the copied text).
