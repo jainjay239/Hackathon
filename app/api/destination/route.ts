@@ -6,9 +6,9 @@ import {
   type DestinationRequest,
 } from "@/lib/validation";
 
-const GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite"];
+const GEMINI_MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"];
 const ATTEMPTS_PER_MODEL = 2;
-const RETRY_DELAY_MS = 800;
+const RETRY_DELAY_MS = 1500;
 
 function geminiUrl(model: string) {
   return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
