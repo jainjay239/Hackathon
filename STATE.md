@@ -15,12 +15,11 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - [1cefc53] Phase 3 - /api/destination route (replaces /api/gems).
 
 ## IN PROGRESS
-- Slice: Phase 8 | Stage: dead code removed, next is README + repo size check + final deploy
+- Slice: Phase 8 | Stage: README + GenAI disclosure done, repo size checked (516 KiB, well under 10 MB), doing final deploy
 
 ## NEXT UP
-1. README + GenAI disclosure
-2. Repo size check (git count-objects -vH)
-3. Final Vercel deploy + live smoke test
+1. Final Vercel deploy + live smoke test
+2. Jay's own click-QA of golden path on deployed URL
 
 ## BLOCKERS / QUESTIONS FOR JAY
 - GitHub auto-connect to Vercel failed during smoke test. Deploy works via direct CLI upload; pushes to GitHub won't auto-deploy yet. Revisit if auto-deploy-on-push wanted.
