@@ -9,22 +9,21 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - BUILD: single /api/destination Gemini call, image-rich result page, Wikipedia image lookup+fallback, save/copy | FAKE: none (events reframed as evergreen "seasonal cultural moments", disclosed) | SKIP: map, live weather API, auth, DB, booking
 
 ## DONE (newest first: [hash] slice - how verified)
-- [pending commit] Removed unused @google/genai and @supabase/supabase-js deps (never imported anywhere) - 45 packages dropped, tsc/eslint/test(40 pass)/build all clean.
+- [pending commit] Score-improvement pass (evaluator: 83.87 -> 91.74, targeting Efficiency 80 and Code Quality 86, the two weakest) - moved `shadcn` CLI tool out of production deps into devDependencies (never imported at runtime), added `typecheck` script + folded into `verify`, added .github/workflows/ci.yml (lint+typecheck+test+build on every push). Audited for dead code/console.logs/`any` types/dangerouslySetInnerHTML - all clean already. npm run verify passes.
+- [1abbd2c] Removed unused @google/genai and @supabase/supabase-js deps.
 - [c46827f] Sidebar navigation + editorial layout + font fix (--font-sans bug, Inter wired correctly). 12-section two-column result page derived from existing Gemini fields (lib/sections.ts, no schema break). Gemini prompt upgraded to warm consultant tone.
-- [ad27039] Expanded discovery filters - tripLength, travelerType, culturalInterests, comfortNeeds.
-- [ea699aa]..[2434143] Testing layer, premium UI polish, Vercel config fix.
-- [f84ef89]..[1cefc53] Phases 3-7 - /api/destination route, rich result page, image lookup+fallback, Save Trip/Copy Itinerary.
+- [ad27039]..[1cefc53] Discovery filters, testing layer, premium UI polish, Vercel config fix, core Phases 3-7.
 
 ## IN PROGRESS
-- Slice: none | Stage: blocked on Jay's Gemini key (free-tier 20/day quota exhausted, two replacement keys so far still hit the same limit - likely same GCP project). Jay fixing key; sidebar click-QA also still pending on his side.
+- Slice: none | Stage: still blocked on Jay's Gemini key (3rd key tried, still hits the same 20/day free-tier quota - almost certainly still the same GCP project). Proposed next/image conversion for Efficiency/Code Quality (touches guarded next.config.ts) - awaiting Jay's go-ahead.
 
 ## NEXT UP
 1. Jay confirms new API key is under a genuinely different/new Google Cloud project (or enables billing) so quota actually resets.
-2. Jay's click-QA of sidebar + new sections once Gemini works again, then redeploy.
-3. Jay decides which of the 4 Vercel projects is the one to submit (hackathon-base recommended, confirmed working before quota ran out).
+2. Jay's approval on next/image conversion (bigger Efficiency win, touches next.config.ts).
+3. Jay's click-QA of sidebar once Gemini works again, then redeploy.
 
 ## BLOCKERS / QUESTIONS FOR JAY
-- Gemini free-tier quota (20 requests/day/project) exhausted from testing today - blocks all live Gemini calls until Jay fixes it (new project or billing).
+- Gemini free-tier quota (20/day/project) still exhausted after 3 key attempts - almost certainly the same underlying GCP project each time.
 - A separate OpenAI Codex process was seen running against this same repo folder earlier - worth checking if still active.
 
 ## DECISIONS LOG (safe technical defaults - newest first)
