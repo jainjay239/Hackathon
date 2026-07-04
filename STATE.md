@@ -16,15 +16,14 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - [ad27039]..[1cefc53] Discovery filters, testing layer, premium UI polish, Vercel config fix, core Phases 3-7.
 
 ## IN PROGRESS
-- Slice: none | Stage: still blocked on Jay's Gemini key (3rd key tried, still hits the same 20/day free-tier quota - almost certainly still the same GCP project)
+- Slice: none | Stage: fully working local + deployed. Gemini key RESOLVED (4th key, serviceTier standard) - verified direct call, local route, and live prod route all 200. Vercel env updated + redeployed.
 
 ## NEXT UP
-1. Jay confirms new API key is under a genuinely different/new Google Cloud project (or enables billing) so quota actually resets.
-2. Jay's click-QA of sidebar + images once Gemini works again, then redeploy.
+1. Jay's click-QA of sidebar + images + full golden path on the live link.
+2. Consider retry-once hardening in /api/destination: one transient "malformed JSON" flake seen on prod (recovered on retry) - a single auto-retry would remove that demo risk.
 
 ## BLOCKERS / QUESTIONS FOR JAY
-- Gemini free-tier quota (20/day/project) still exhausted after 3 key attempts - almost certainly the same underlying GCP project each time.
-- A separate OpenAI Codex process was seen running against this same repo folder earlier - worth checking if still active.
+- (none)
 
 ## DECISIONS LOG (safe technical defaults - newest first)
 - 2026-07-04: Sidebar sections derived from existing cultureAtAGlance/localExperiences tags (lib/sections.ts), not new Gemini fields - keeps schema backward-compatible per instruction.
