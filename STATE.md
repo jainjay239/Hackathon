@@ -9,14 +9,15 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - BUILD: gems list, story/heritage/event/tip, save-to-trip (localStorage) | FAKE: gem "photo" = emoji/gradient, disclosed | SKIP: map, real events API, multi-language, auth
 
 ## DONE (newest first: [hash] slice - how verified)
-- [pending commit] Phase 4 - rich result page (hero, why-it-fits, culture-at-a-glance, hidden gems, story, experiences+etiquette, 1-day itinerary; gradient+emoji placeholders) - tsc/eslint clean, / renders 200.
-- [1cefc53] Phase 3 - /api/destination route (replaces /api/gems) - real Gemini JSON verified for Jaipur+prefs.
+- [pending commit] Phase 5 - components/destination-image.tsx: Wikipedia REST image lookup (keyless) + gradient/emoji fallback on no-match or load error - tsc/eslint clean, confirmed real thumbnail for "Jaipur Amber Fort" and clean empty response (safe fallback) for a nonsense query.
+- [749a217] Phase 4 - rich result page (8 sections, placeholders).
+- [1cefc53] Phase 3 - /api/destination route (replaces /api/gems).
 
 ## IN PROGRESS
-- Slice: none | Stage: ready for Phase 5
+- Slice: none | Stage: doing early Vercel deploy smoke test per Jay's instruction (before Phase 6)
 
 ## NEXT UP (revised plan, 60-min budget from 2026-07-04 approval)
-1. Phase 5 - remote image lookup (Wikipedia REST) + fallback, THEN quick Vercel deploy smoke test
+1. Vercel deploy smoke test (early check, not waiting for Phase 8)
 2. Phase 6 - weather/budget/mood preference chips
 3. Phase 7 - Save Trip + Copy Itinerary
 4. Phase 8 - cleanup, README, repo size check (git count-objects -vH), final Vercel deploy

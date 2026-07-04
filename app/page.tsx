@@ -4,8 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-type GlanceType = "heritage" | "food" | "festival" | "craft" | "hiddenGem" | "experience";
+import { DestinationImage, type GlanceType } from "@/components/destination-image";
 
 interface GlanceCard {
   type: GlanceType;
@@ -40,28 +39,6 @@ interface DestinationGuide {
 }
 
 const PRESET_DESTINATIONS = ["Jaipur", "Varanasi", "Kyoto", "Bali", "Istanbul", "Oaxaca"];
-
-const CATEGORY_STYLES: Record<GlanceType, { emoji: string; gradient: string }> = {
-  heritage: { emoji: "🏛️", gradient: "from-amber-200 to-orange-300 dark:from-amber-900 dark:to-orange-950" },
-  food: { emoji: "🍲", gradient: "from-rose-200 to-red-300 dark:from-rose-900 dark:to-red-950" },
-  festival: { emoji: "🎉", gradient: "from-fuchsia-200 to-purple-300 dark:from-fuchsia-900 dark:to-purple-950" },
-  craft: { emoji: "🧵", gradient: "from-teal-200 to-emerald-300 dark:from-teal-900 dark:to-emerald-950" },
-  hiddenGem: { emoji: "💎", gradient: "from-sky-200 to-blue-300 dark:from-sky-900 dark:to-blue-950" },
-  experience: { emoji: "🌟", gradient: "from-yellow-200 to-amber-300 dark:from-yellow-900 dark:to-amber-950" },
-};
-
-function ImagePlaceholder({ type, label }: { type: GlanceType; label: string }) {
-  const style = CATEGORY_STYLES[type];
-  return (
-    <div
-      role="img"
-      aria-label={label}
-      className={`flex aspect-video w-full items-center justify-center rounded-lg bg-gradient-to-br text-4xl ${style.gradient}`}
-    >
-      <span aria-hidden="true">{style.emoji}</span>
-    </div>
-  );
-}
 
 export default function Home() {
   const [destination, setDestination] = useState("");
@@ -172,12 +149,19 @@ export default function Home() {
       </div>
 
       <div className="w-full max-w-4xl px-6 pt-4">
-        <div className="relative flex aspect-[21/9] w-full flex-col justify-end overflow-hidden rounded-xl bg-gradient-to-br from-indigo-300 to-violet-400 p-6 dark:from-indigo-950 dark:to-violet-950">
-          <h1 className="text-3xl font-semibold text-white drop-shadow">
-            {guide.destinationName}
-          </h1>
-          <p className="text-white/90 drop-shadow">{guide.country}</p>
-        </div>
+        <DestinationImage
+          type="hero"
+          query={guide.heroImageQuery}
+          label={`${guide.destinationName} cultural hero image`}
+          className="aspect-[21/9] rounded-xl"
+        >
+          <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/70 via-black/10 to-transparent p-6">
+            <h1 className="text-3xl font-semibold text-white drop-shadow">
+              {guide.destinationName}
+            </h1>
+            <p className="text-white/90 drop-shadow">{guide.country}</p>
+          </div>
+        </DestinationImage>
         <p className="mt-4 text-lg text-foreground/90">{guide.culturalIntro}</p>
       </div>
 
@@ -197,7 +181,7 @@ export default function Home() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {guide.cultureAtAGlance.map((card) => (
             <Card key={card.title}>
-              <ImagePlaceholder type={card.type} label={card.imageQuery} />
+              <DestinationImage type={card.type} query={card.imageQuery} label={card.imageQuery} />
               <CardHeader>
                 <CardTitle className="text-base">{card.title}</CardTitle>
               </CardHeader>
@@ -214,7 +198,7 @@ export default function Home() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {guide.hiddenGems.map((gem) => (
             <Card key={gem.name}>
-              <ImagePlaceholder type="hiddenGem" label={gem.imageQuery} />
+              <DestinationImage type="hiddenGem" query={gem.imageQuery} label={gem.imageQuery} />
               <CardHeader>
                 <CardTitle className="text-base">{gem.name}</CardTitle>
               </CardHeader>
