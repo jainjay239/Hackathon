@@ -25,11 +25,14 @@ The traveler's destination and weather/budget/mood preferences are sent to Gemin
 
 There is no live events API. Where the problem statement calls for "local events," Gemini generates an evergreen "seasonal cultural moment" (e.g. a recurring festival or tradition) framed generally rather than as a specific dated event, since there is no real events data source.
 
-Environment variable required in `.env.local` (and in the Vercel project's environment variables for deployment):
+Environment variable required (see `.env.example`):
 
 ```bash
 GEMINI_API_KEY=your_key_here
 ```
+
+For local development, create `.env.local` and add `GEMINI_API_KEY`.
+For Vercel deployment, add `GEMINI_API_KEY` in: Vercel Project → Settings → Environment Variables → GEMINI_API_KEY. Then redeploy the latest commit.
 
 ## Local Development
 

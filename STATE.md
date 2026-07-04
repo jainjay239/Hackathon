@@ -15,11 +15,12 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - [1cefc53] Phase 3 - /api/destination route (replaces /api/gems).
 
 ## IN PROGRESS
-- Slice: Phase 8 | Stage: README + GenAI disclosure done, repo size checked (516 KiB, well under 10 MB), doing final deploy
+- Slice: none | Stage: Phase 8 complete
 
 ## NEXT UP
-1. Final Vercel deploy + live smoke test
-2. Jay's own click-QA of golden path on deployed URL
+1. Jay adds GEMINI_API_KEY to the `hackathon2323` Vercel project (Settings -> Environment Variables) and redeploys - that's the GitHub-connected project, separate from `hackathon-base` which I configured via CLI and already works.
+2. Jay decides which of the 4 Vercel projects (hackathon-base, hackathon2323, warmup-cooking-app, warmup-cooking-app-t6lm) is the one to submit.
+3. Jay's own click-QA of golden path on the chosen deployed URL.
 
 ## BLOCKERS / QUESTIONS FOR JAY
 - GitHub auto-connect to Vercel failed during smoke test. Deploy works via direct CLI upload; pushes to GitHub won't auto-deploy yet. Revisit if auto-deploy-on-push wanted.
