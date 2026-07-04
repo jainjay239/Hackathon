@@ -9,17 +9,19 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - BUILD: gems list, story/heritage/event/tip, save-to-trip (localStorage) | FAKE: gem "photo" = emoji/gradient, disclosed | SKIP: map, real events API, multi-language, auth
 
 ## DONE (newest first: [hash] slice - how verified)
-- [pending commit] Phase 2 - home UI (search + presets + gem grid) - tsc clean, eslint clean, / returns 200 with "Culture Compass" title, replaced stale leftover audit-dashboard page.
-- [b8e9d65] Phase 1 - /api/gems route - tsc clean, eslint clean, curl POST returned 5 real Gemini gems for "Jaipur" (200), missing-destination returned clean 400.
+- [pending commit] Phase 3 (REVISED PLAN) - /api/destination route (replaces /api/gems, deleted) - tsc/eslint clean, curl returned full real Gemini JSON for Jaipur+prefs: intro, whyItFits, 6 glance cards, 3 hidden gems, story, 5 experiences (incl. seasonal-moment framing not fake event), 4 etiquette tips, 1-day itinerary.
+- [a094744] Phase 2 (OLD PLAN, superseded) - home UI search+gems grid.
+- [b8e9d65] Phase 1 (OLD PLAN, superseded) - /api/gems route.
 
 ## IN PROGRESS
-- Slice: none | Stage: ready for Phase 3
+- Slice: none | Stage: ready for Phase 4 (revised plan)
 
-## NEXT UP
-1. Phase 3 - /api/story route
-2. Phase 4 - story dialog UI
-3. Phase 5 - save-to-trip + /my-trip
-4. Phase 6 - polish, README/GenAI disclosure, deploy
+## NEXT UP (revised plan, 60-min budget from 2026-07-04 approval)
+1. Phase 4 - rich result page layout (8 sections, placeholder gradient/emoji images)
+2. Phase 5 - remote image lookup (Wikipedia REST) + fallback, THEN quick Vercel deploy smoke test
+3. Phase 6 - weather/budget/mood preference chips
+4. Phase 7 - Save Trip + Copy Itinerary
+5. Phase 8 - cleanup, README, repo size check (git count-objects -vH), final Vercel deploy
 
 ## BLOCKERS / QUESTIONS FOR JAY
 - (none)
