@@ -209,5 +209,3 @@ export async function generateCookingPlan(
     };
   }
 }
-
-export const initialCookingPlanState: CookingPlanActionState = { status: "idle" };

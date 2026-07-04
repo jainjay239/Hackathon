@@ -4,8 +4,10 @@ import { useActionState } from "react";
 import { Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { generateCookingPlan, initialCookingPlanState } from "../actions";
-import type { CookingPlan } from "../types";
+import { generateCookingPlan } from "../actions";
+import type { CookingPlan, CookingPlanActionState } from "../types";
+
+const initialCookingPlanState: CookingPlanActionState = { status: "idle" };
 
 function MealPlanSection({ mealPlan }: { mealPlan: CookingPlan["mealPlan"] }) {
   const meals = [
