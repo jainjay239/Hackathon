@@ -19,6 +19,7 @@ const EMPTY_PREFERENCES: PreferenceFiltersValue = {
   budget: "",
   weather: "",
   mood: "",
+  dietaryNeeds: [],
   culturalInterests: [],
   comfortNeeds: [],
 };

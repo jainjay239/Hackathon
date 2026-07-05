@@ -22,6 +22,7 @@ export const MOOD_OPTIONS = [
   "Heritage lover",
   "Photographer",
 ];
+export const DIETARY_OPTIONS = ["100% Pure Vegetarian", "Jain", "Vegan"];
 export const CULTURAL_INTEREST_OPTIONS = [
   "Food",
   "Festivals",

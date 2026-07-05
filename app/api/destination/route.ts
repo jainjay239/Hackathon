@@ -24,6 +24,7 @@ function buildPrompt({
   weather,
   budget,
   mood,
+  dietaryNeeds,
   culturalInterests,
   comfortNeeds,
 }: DestinationRequest) {
@@ -43,6 +44,7 @@ Traveler preferences:
 - weather: ${weather || "any"}
 - budget: ${budget || "any"}
 - mood: ${mood || "any"}
+- dietary needs: ${dietaryNeeds.length > 0 ? dietaryNeeds.join(", ") : "not specified"}
 - cultural interests: ${culturalInterests.length > 0 ? culturalInterests.join(", ") : "not specified"}
 - comfort needs: ${comfortNeeds.length > 0 ? comfortNeeds.join(", ") : "not specified"}
 
@@ -50,6 +52,8 @@ Use these preferences to personalize the guide like a consultant would:
 - "whyItFits" must explicitly reference the traveler's budget, weather, mood, traveler type, and any stated cultural interests, and explain the practical/emotional benefit of each, not just restate them.
 - "localExperiences" should prioritize experiences matching the stated cultural interests when any are given, and should call out photo-worthy or story-worthy moments alongside practical value (time, cost, effort).
 - "localEtiquette" should include tips relevant to the traveler type and comfort needs when relevant (e.g. family/senior-friendly notes, low-crowd or easy-walking spots, accessibility-sensitive guidance).
+- Dietary needs are STRICT constraints, not suggestions: every food card, food experience, market recommendation, and itinerary meal must genuinely fit ALL stated dietary needs ("100% Pure Vegetarian" = no meat/fish/egg anywhere; "Jain" = additionally no onion, garlic, or root vegetables - recommend Jain-friendly eateries where they truly exist; "Vegan" = no animal products including dairy and ghee). Name real places/dishes known to fit; if a classic local dish does not fit, either skip it or name its genuine compliant variant. Never present non-compliant food as compliant.
+- If dietary needs include "Jain" AND the destination genuinely has a famous Jain temple or Jain heritage site (e.g. Ranakpur, Palitana, Dilwara, Shravanabelagola, Gomateshwara): include it as one of the "heritage" cultureAtAGlance cards or hiddenGems, AND weave it into "immersiveStory" with respectful, vivid storytelling about its artistry and spiritual atmosphere. If the destination has NO genuinely notable Jain site, do not invent or exaggerate one - simply omit this.
 - "itinerary" must contain EXACTLY ${dayCount} day object(s) - one per day of the traveler's trip. Each day must be distinct (no repeated activities across days), flow logically (e.g. arrival-day pacing first, deeper exploration later), and respect the traveler's comfort needs and budget in its pacing.
 
 Return ONLY a JSON object, no markdown fences, no commentary, matching exactly this shape:

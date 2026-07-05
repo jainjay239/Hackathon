@@ -15,6 +15,7 @@ describe("parseDestinationRequest", () => {
       weather: " Warm ",
       budget: "Budget",
       mood: "",
+      dietaryNeeds: ["Jain", " Vegan "],
       culturalInterests: ["Food", "  Festivals  "],
       comfortNeeds: ["Easy walking"],
     });
@@ -26,6 +27,7 @@ describe("parseDestinationRequest", () => {
       weather: "Warm",
       budget: "Budget",
       mood: "",
+      dietaryNeeds: ["Jain", "Vegan"],
       culturalInterests: ["Food", "Festivals"],
       comfortNeeds: ["Easy walking"],
     });
@@ -40,6 +42,7 @@ describe("parseDestinationRequest", () => {
       weather: "",
       budget: "",
       mood: "",
+      dietaryNeeds: [],
       culturalInterests: [],
       comfortNeeds: [],
     });

@@ -7,6 +7,7 @@ import {
   Clock,
   CloudSun,
   Heart,
+  Leaf,
   Sparkles,
   Users,
   Wallet,
@@ -15,6 +16,7 @@ import {
   BUDGET_OPTIONS,
   COMFORT_NEED_OPTIONS,
   CULTURAL_INTEREST_OPTIONS,
+  DIETARY_OPTIONS,
   MOOD_OPTIONS,
   TRAVELER_TYPE_OPTIONS,
   TRIP_LENGTH_OPTIONS,
@@ -128,6 +130,7 @@ export interface PreferenceFiltersValue {
   budget: string;
   weather: string;
   mood: string;
+  dietaryNeeds: string[];
   culturalInterests: string[];
   comfortNeeds: string[];
 }
@@ -188,6 +191,14 @@ export function PreferenceFilters({
           options={MOOD_OPTIONS}
           value={value.mood}
           onChange={(mood) => onChange({ ...value, mood })}
+          disabled={disabled}
+        />
+        <MultiSelectGroup
+          icon={<Leaf className="size-3.5" aria-hidden="true" />}
+          label="Food preference"
+          options={DIETARY_OPTIONS}
+          values={value.dietaryNeeds}
+          onChange={(dietaryNeeds) => onChange({ ...value, dietaryNeeds })}
           disabled={disabled}
         />
       </div>

@@ -8,6 +8,7 @@ export interface DestinationRequest {
   weather: string;
   budget: string;
   mood: string;
+  dietaryNeeds: string[];
   culturalInterests: string[];
   comfortNeeds: string[];
 }
@@ -46,6 +47,7 @@ export function parseDestinationRequest(
     weather: readString(record.weather),
     budget: readString(record.budget),
     mood: readString(record.mood),
+    dietaryNeeds: readStringArray(record.dietaryNeeds),
     culturalInterests: readStringArray(record.culturalInterests),
     comfortNeeds: readStringArray(record.comfortNeeds),
   };
