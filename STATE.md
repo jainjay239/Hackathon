@@ -16,12 +16,12 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - [ad27039]..[1cefc53] Discovery filters, testing layer, premium UI polish, Vercel config fix, core Phases 3-7.
 
 ## IN PROGRESS
-- Slice: multi-day itinerary [fc8580f] - tripLength now maps deterministically to day count (Weekend=2, 3 days=3, 5 days=5, 1 week=7), prompt demands EXACTLY N days, validator enforces, legacy saved trips auto-migrate. 49 unit tests pass, deployed. LIVE Gemini proof pending: daily quota exhausted again, resets ~12:30-1:30 PM IST; auto-verification scheduled.
+- Slice: none | Stage: multi-day itinerary LIVE-VERIFIED for Jay's exact case (Denmark+Weekend+Premium+Foodie -> exactly 2 distinct labeled days, both prefs reflected in whyItFits). 3d/7d cases unit-tested but not live-proven - quota 429'd after one call.
 
 ## NEXT UP
-1. Live 3-case verification (Denmark+Weekend=2d, Jaipur 3d, Bali 7d + Premium/Foodie reflection) auto-runs after quota reset.
-2. Jay's click-QA: multi-day itinerary render, saved trips, sidebar.
-3. Billing on the Gemini key still the only real quota fix (4th reminder) - free tier = ~20 req/day/model, one bad testing session kills the demo.
+1. Jay: report which browser-fix step worked (ERRORS.md #8) so the incident can be closed.
+2. Jay's click-QA: terracotta brand color, chip glow, multi-day itinerary render.
+3. Billing on the Gemini key (5th reminder) - today's proof: ONE heavy call after quota reset, then dead again. Portfolio visitors will hit this wall.
 
 ## BLOCKERS / QUESTIONS FOR JAY
 - (none)
