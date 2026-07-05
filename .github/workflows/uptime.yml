@@ -1,0 +1,21 @@
+name: Uptime check
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check production is serving
+        run: |
+          for i in 1 2 3; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 https://hackathon-base-sage.vercel.app/)
+            echo "attempt $i -> HTTP $status"
+            if [ "$status" = "200" ]; then exit 0; fi
+            sleep 15
+          done
+          echo "Site failed 3 consecutive checks - real outage, not a browser issue."
+          exit 1
