@@ -27,6 +27,7 @@ Next.js 16 App Router + TypeScript + Tailwind v4 + shadcn/ui. Supabase (pre-inst
 - Problem statement -> read HACKATHON-DAY.md, run scoping-strategist skill, NO code until plan approved
 - Plan approved -> write into STATE.md, build via feature-slice-builder skill
 - Any error -> error-fix-protocol skill (3 attempts, then stop and offer revert)
+- UI/UX work (styling, animation, layout, components, "design"/"polish"/"premium") -> ui-craft skill checklist before coding
 - Repeat pattern (2x) -> skill-ops-manager proposal, wait for approval
 - "demo prep" / final hour -> demo-doc-generator skill, T-30 code lock
 
