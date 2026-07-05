@@ -1,5 +1,6 @@
 export type GlanceType =
   | "hero"
+  | "attraction"
   | "heritage"
   | "food"
   | "festival"

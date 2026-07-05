@@ -42,11 +42,13 @@ export interface DestinationSections {
   experiences: LocalExperience[];
 }
 
+const SIGHTSEEING_TYPES: GlanceType[] = ["attraction", "heritage", "hiddenGem", "experience"];
+
 export function deriveDestinationSections(guide: DestinationGuide): DestinationSections {
   const { cultureAtAGlance, localExperiences } = guide;
 
   return {
-    sightseeing: cultureAtAGlance,
+    sightseeing: cultureAtAGlance.filter((card) => SIGHTSEEING_TYPES.includes(card.type)),
     foodGlance: filterGlanceByType(cultureAtAGlance, "food"),
     foodExperiences: getFoodExperiences(localExperiences),
     localHighlights: getNonFoodExperiences(localExperiences).slice(0, 2),

@@ -7,6 +7,7 @@ import {
   Check,
   Compass,
   Copy,
+  ExternalLink,
   MapPin,
   Quote,
   Sun,
@@ -17,11 +18,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DestinationImage } from "@/components/destination-image";
 import { DestinationSidebar, type SidebarItem } from "@/components/destination-sidebar";
+import { findTourismBoard } from "@/lib/destinations";
 import { deriveDestinationSections } from "@/lib/sections";
 import type { DestinationGuide, GlanceCard, GlanceType, LocalExperience } from "@/lib/types";
 
 const GLANCE_LABELS: Record<GlanceType, string> = {
   hero: "Highlight",
+  attraction: "Attraction",
   heritage: "Heritage",
   food: "Food",
   festival: "Festival",
@@ -117,6 +120,7 @@ export function DestinationGuideView({
   copyStatus: "idle" | "copied";
 }) {
   const sections = deriveDestinationSections(guide);
+  const tourismBoard = findTourismBoard(guide.destinationName);
 
   return (
     <div className="flex w-full flex-1 flex-col items-center bg-background px-6 pb-20 pt-6">
@@ -156,6 +160,17 @@ export function DestinationGuideView({
                 </div>
               </DestinationImage>
               <p className="mt-5 text-lg leading-relaxed text-foreground/90">{guide.culturalIntro}</p>
+              {tourismBoard && (
+                <a
+                  href={tourismBoard.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                >
+                  <ExternalLink className="size-3.5" aria-hidden="true" />
+                  {tourismBoard.label}
+                </a>
+              )}
               <Card className="mt-5 border-none bg-gradient-to-br from-amber-50 to-orange-50 shadow-sm dark:from-amber-950/40 dark:to-orange-950/40">
                 <CardContent className="pt-4">
                   <Quote className="size-6 text-primary/40" aria-hidden="true" />

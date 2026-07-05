@@ -10,6 +10,7 @@ export type { GlanceType };
 
 const CATEGORY_STYLES: Record<GlanceType, { emoji: string; gradient: string }> = {
   hero: { emoji: "🧭", gradient: "from-indigo-300 to-violet-400 dark:from-indigo-950 dark:to-violet-950" },
+  attraction: { emoji: "🏰", gradient: "from-emerald-200 to-cyan-300 dark:from-emerald-900 dark:to-cyan-950" },
   heritage: { emoji: "🏛️", gradient: "from-amber-200 to-orange-300 dark:from-amber-900 dark:to-orange-950" },
   food: { emoji: "🍲", gradient: "from-rose-200 to-red-300 dark:from-rose-900 dark:to-red-950" },
   festival: { emoji: "🎉", gradient: "from-fuchsia-200 to-purple-300 dark:from-fuchsia-900 dark:to-purple-950" },

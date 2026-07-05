@@ -14,6 +14,7 @@ const guide: DestinationGuide = {
   heroImageQuery: "",
   whyItFits: "",
   cultureAtAGlance: [
+    { type: "attraction", title: "Hawa Mahal", description: "The palace of winds.", imageQuery: "Hawa Mahal" },
     { type: "heritage", title: "Amber Fort", description: "A hilltop fort.", imageQuery: "Amber Fort" },
     { type: "food", title: "Dal Baati", description: "A hearty dish.", imageQuery: "Dal Baati" },
     { type: "craft", title: "Block printing", description: "Hand-carved blocks.", imageQuery: "Block printing" },
@@ -31,8 +32,8 @@ const guide: DestinationGuide = {
 
 describe("filterGlanceByType", () => {
   it("returns only cards matching the given type", () => {
-    expect(filterGlanceByType(guide.cultureAtAGlance, "heritage")).toEqual([guide.cultureAtAGlance[0]]);
-    expect(filterGlanceByType(guide.cultureAtAGlance, "festival")).toEqual([guide.cultureAtAGlance[3]]);
+    expect(filterGlanceByType(guide.cultureAtAGlance, "heritage")).toEqual([guide.cultureAtAGlance[1]]);
+    expect(filterGlanceByType(guide.cultureAtAGlance, "festival")).toEqual([guide.cultureAtAGlance[4]]);
   });
 });
 
@@ -47,13 +48,21 @@ describe("deriveDestinationSections", () => {
   it("maps existing guide fields into the sidebar categories without losing data", () => {
     const sections = deriveDestinationSections(guide);
 
-    expect(sections.sightseeing).toHaveLength(4);
-    expect(sections.foodGlance).toEqual([guide.cultureAtAGlance[1]]);
+    expect(sections.sightseeing).toEqual([guide.cultureAtAGlance[0], guide.cultureAtAGlance[1]]);
+    expect(sections.foodGlance).toEqual([guide.cultureAtAGlance[2]]);
     expect(sections.foodExperiences).toEqual([guide.localExperiences[0]]);
-    expect(sections.traditions).toEqual([guide.cultureAtAGlance[2], guide.cultureAtAGlance[3]]);
-    expect(sections.heritage).toEqual([guide.cultureAtAGlance[0]]);
-    expect(sections.festivals).toEqual([guide.cultureAtAGlance[3]]);
+    expect(sections.traditions).toEqual([guide.cultureAtAGlance[3], guide.cultureAtAGlance[4]]);
+    expect(sections.heritage).toEqual([guide.cultureAtAGlance[1]]);
+    expect(sections.festivals).toEqual([guide.cultureAtAGlance[4]]);
     expect(sections.experiences).toEqual(guide.localExperiences);
+  });
+
+  it("never places food, festival, or craft cards under sightseeing", () => {
+    const sections = deriveDestinationSections(guide);
+    const types = sections.sightseeing.map((card) => card.type);
+    expect(types).not.toContain("food");
+    expect(types).not.toContain("festival");
+    expect(types).not.toContain("craft");
   });
 
   it("returns empty arrays for categories with no matching content instead of throwing", () => {

@@ -37,6 +37,7 @@ Writing style rules:
 - Never use robotic openers like "Here is the information you requested" and never write dry, encyclopedia-style prose.
 - Avoid generic filler phrases like "vibrant city" or "rich history" without specifics.
 - Keep sentences clear and readable - this guide is read by a wide range of travelers, from those who want fast, photo-worthy highlights to those who want practical, unhurried, easy-to-follow guidance. Write so both feel served, without calling out or stereotyping any age group or traveler segment.
+- Ground every recommendation in real, verifiable places: prioritize attractions and experiences genuinely promoted by the destination's official national/state tourism board, alongside well-documented local knowledge. Never invent a place, restaurant, or festival.
 
 Traveler preferences:
 - trip length: ${tripLength || "not specified"}
@@ -63,7 +64,7 @@ Return ONLY a JSON object, no markdown fences, no commentary, matching exactly t
   "culturalIntro": string (2-3 sentences, evocative, specific to this place),
   "heroImageQuery": string (short search phrase for a real photo of this destination, e.g. "Jaipur Amber Fort"),
   "whyItFits": string (2-3 sentences explicitly referencing the traveler's preferences above),
-  "cultureAtAGlance": array of 5-6 objects {"type": one of "heritage"|"food"|"festival"|"craft"|"hiddenGem"|"experience", "title": string, "description": string (1-2 sentences), "imageQuery": string (specific search phrase, e.g. "Jaipur block printing")},
+  "cultureAtAGlance": array of 6-8 objects {"type": one of "attraction"|"heritage"|"food"|"festival"|"craft"|"hiddenGem"|"experience", "title": string, "description": string (1-2 sentences), "imageQuery": string (specific search phrase, e.g. "Jaipur block printing")}. Include at least 2 of type "attraction" - the destination's genuinely famous, must-see landmarks (the kind its official tourism board headlines). "attraction"/"heritage"/"hiddenGem" must be real visitable PLACES, never dishes or foods,
   "hiddenGems": array of 3-4 objects {"name": string, "description": string (1-2 sentences, lesser-known spot), "imageQuery": string},
   "immersiveStory": string (1 short narrative paragraph telling a vivid cultural story about this place, as if guiding the traveler through it),
   "localExperiences": array of 4-5 objects {"title": string, "description": string}. Include at least one evergreen "seasonal cultural moment" (e.g. a recurring festival or seasonal tradition) phrased generally, not a specific dated event, since we have no live events data.
