@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { DestinationImage } from "@/components/destination-image";
 import { DestinationGuideView } from "@/components/destination-guide";
 import { PreferenceFilters, type PreferenceFiltersValue } from "@/components/preference-filters";
+import { persistTrips, SavedTrips } from "@/components/saved-trips";
 import { PRESET_DESTINATIONS } from "@/lib/destinations";
 import { formatItinerary } from "@/lib/formatters";
 import { mergeSavedTrip, parseSavedTrips, SAVED_TRIPS_KEY } from "@/lib/storage";
@@ -92,7 +93,7 @@ export default function Home() {
   function saveTrip() {
     if (!guide) return;
     const existing = parseSavedTrips(localStorage.getItem(SAVED_TRIPS_KEY));
-    localStorage.setItem(SAVED_TRIPS_KEY, JSON.stringify(mergeSavedTrip(existing, guide)));
+    persistTrips(mergeSavedTrip(existing, guide));
     setSaveStatus("saved");
     setTimeout(() => setSaveStatus("idle"), 2000);
   }
@@ -218,6 +219,8 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      <SavedTrips onOpen={setGuide} />
 
       <section className="mx-auto w-full max-w-5xl px-6 py-14">
         <h2 className="text-xl font-semibold tracking-tight text-foreground">Popular destinations</h2>

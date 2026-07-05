@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { mergeSavedTrip, parseSavedTrips } from "./storage";
+import { mergeSavedTrip, parseSavedTrips, removeSavedTrip } from "./storage";
 import type { DestinationGuide } from "./types";
 
 function makeGuide(destinationName: string): DestinationGuide {
@@ -55,5 +55,18 @@ describe("mergeSavedTrip", () => {
     const result = mergeSavedTrip([original], updated);
     expect(result).toHaveLength(1);
     expect(result[0].country).toBe("Updated");
+  });
+});
+
+describe("removeSavedTrip", () => {
+  it("removes only the trip with the given destination name", () => {
+    const kyoto = makeGuide("Kyoto");
+    const jaipur = makeGuide("Jaipur");
+    expect(removeSavedTrip([kyoto, jaipur], "Kyoto")).toEqual([jaipur]);
+  });
+
+  it("returns the list unchanged when the name is not found", () => {
+    const kyoto = makeGuide("Kyoto");
+    expect(removeSavedTrip([kyoto], "Bali")).toEqual([kyoto]);
   });
 });

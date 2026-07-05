@@ -21,3 +21,10 @@ export function mergeSavedTrip(
     guide,
   ];
 }
+
+export function removeSavedTrip(
+  existing: DestinationGuide[],
+  destinationName: string
+): DestinationGuide[] {
+  return existing.filter((trip) => trip.destinationName !== destinationName);
+}

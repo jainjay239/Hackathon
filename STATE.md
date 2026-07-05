@@ -16,11 +16,11 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - [ad27039]..[1cefc53] Discovery filters, testing layer, premium UI polish, Vercel config fix, core Phases 3-7.
 
 ## IN PROGRESS
-- Slice: none | Stage: fully working local + deployed. Gemini key RESOLVED (4th key, serviceTier standard) - verified direct call, local route, and live prod route all 200. Vercel env updated + redeployed.
+- Slice: none | Stage: Saved trips view built (closes the Save Trip loop) - section on home page lists saved guides from localStorage, click reopens instantly with zero Gemini calls, X removes. useSyncExternalStore for hydration-safe reads. 42 tests pass.
 
 ## NEXT UP
-1. Jay's click-QA of sidebar + images + full golden path on the live link.
-2. Consider retry-once hardening in /api/destination: one transient "malformed JSON" flake seen on prod (recovered on retry) - a single auto-retry would remove that demo risk.
+1. Jay's click-QA: full golden path incl. Save trip -> back -> Saved trips section -> reopen -> remove.
+2. Key still free-tier (20/day on primary model) - billing remains the recommended fix before judging; 3-model fallback chain is the mitigation.
 
 ## BLOCKERS / QUESTIONS FOR JAY
 - (none)
