@@ -39,13 +39,13 @@ function ChipButton({
       onClick={onClick}
       disabled={disabled}
       aria-pressed={selected}
-      className={`rounded-full border px-3 py-1 text-xs font-medium transition-all disabled:opacity-50 ${
+      className={`rounded-full border px-3 py-1 text-xs font-medium transition-all active:scale-95 disabled:opacity-50 ${
         selected
-          ? "border-primary bg-primary text-primary-foreground shadow-sm"
+          ? "chip-glow text-primary-foreground shadow-sm"
           : "border-border text-muted-foreground hover:bg-muted hover:text-foreground"
       }`}
     >
-      {label}
+      <span className="relative z-10">{label}</span>
     </button>
   );
 }

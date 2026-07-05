@@ -43,7 +43,7 @@ function DestinationCard({
       type="button"
       onClick={onSelect}
       disabled={disabled}
-      className="group block w-full overflow-hidden rounded-2xl text-left shadow-md transition-all hover:-translate-y-1 hover:shadow-xl disabled:pointer-events-none disabled:opacity-50"
+      className="group block w-full overflow-hidden rounded-2xl text-left shadow-md transition-all hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50"
     >
       <DestinationImage
         type="hero"

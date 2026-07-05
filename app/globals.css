@@ -127,3 +127,58 @@
     @apply font-sans;
   }
 }
+
+:root {
+  --chip-glow-1: oklch(0.83 0.16 75);
+  --chip-glow-2: oklch(0.72 0.18 20);
+  --chip-glow-3: oklch(0.74 0.13 240);
+}
+
+.dark {
+  --chip-glow-1: oklch(0.88 0.15 75);
+  --chip-glow-2: oklch(0.78 0.16 20);
+  --chip-glow-3: oklch(0.8 0.12 240);
+}
+
+@keyframes chip-orbit {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.chip-glow {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-color: transparent;
+}
+
+.chip-glow::before {
+  content: "";
+  position: absolute;
+  inset: -150%;
+  z-index: -2;
+  background: conic-gradient(
+    from 0deg,
+    transparent 60%,
+    var(--chip-glow-1) 78%,
+    var(--chip-glow-2) 88%,
+    var(--chip-glow-3) 96%,
+    transparent 100%
+  );
+}
+
+.chip-glow::after {
+  content: "";
+  position: absolute;
+  inset: 1.5px;
+  z-index: -1;
+  border-radius: 9999px;
+  background: var(--primary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .chip-glow::before {
+    animation: chip-orbit 2.5s linear infinite;
+  }
+}
