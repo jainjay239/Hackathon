@@ -16,11 +16,12 @@ RULE: Update after EVERY verified slice, before the commit. This file wins over 
 - [ad27039]..[1cefc53] Discovery filters, testing layer, premium UI polish, Vercel config fix, core Phases 3-7.
 
 ## IN PROGRESS
-- Slice: none | Stage: Saved trips view built (closes the Save Trip loop) - section on home page lists saved guides from localStorage, click reopens instantly with zero Gemini calls, X removes. useSyncExternalStore for hydration-safe reads. 42 tests pass.
+- Slice: multi-day itinerary [fc8580f] - tripLength now maps deterministically to day count (Weekend=2, 3 days=3, 5 days=5, 1 week=7), prompt demands EXACTLY N days, validator enforces, legacy saved trips auto-migrate. 49 unit tests pass, deployed. LIVE Gemini proof pending: daily quota exhausted again, resets ~12:30-1:30 PM IST; auto-verification scheduled.
 
 ## NEXT UP
-1. Jay's click-QA: full golden path incl. Save trip -> back -> Saved trips section -> reopen -> remove.
-2. Key still free-tier (20/day on primary model) - billing remains the recommended fix before judging; 3-model fallback chain is the mitigation.
+1. Live 3-case verification (Denmark+Weekend=2d, Jaipur 3d, Bali 7d + Premium/Foodie reflection) auto-runs after quota reset.
+2. Jay's click-QA: multi-day itinerary render, saved trips, sidebar.
+3. Billing on the Gemini key still the only real quota fix (4th reminder) - free tier = ~20 req/day/model, one bad testing session kills the demo.
 
 ## BLOCKERS / QUESTIONS FOR JAY
 - (none)
