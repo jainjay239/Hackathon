@@ -4,13 +4,14 @@ Rule: every notable error gets an entry BEFORE it is fixed. Format: symptom -> w
 
 ---
 
-## 8. "This page couldn't load" in Jay's Chrome (RECURRING - partially open)
-- **Date**: 2026-07-04, recurred 2026-07-05
-- **Symptom**: Chrome shows generic "This page couldn't load" for hackathon-base-sage.vercel.app. Same machine, same moment: curl gets HTTP 200 in ~0.3s.
-- **Tried**: server-side verification (200 OK both times), Windows proxy registry (clean), hosts file (clean), Chrome enterprise policies (none), DNS A records (resolve fine), OS-level networking (fine).
-- **Root cause**: NOT the app, NOT the server, NOT Windows - the failure is inside the Chrome profile itself. Prime suspects: an extension blocking *.vercel.app (security/adblock extensions often flag vercel.app because phishing kits get hosted there) or Chrome "Secure DNS" (DoH) failing for the domain.
-- **Fix**: pending Jay's 3-step isolation (incognito -> other browser -> Secure DNS off). App-side nothing to fix.
-- **Prevention**: never debug this as an app issue again - first command is `curl -s -o /dev/null -w "%{http_code}" <url>`; if 200, it is the browser profile. Test in incognito before touching any code.
+## 8. "This page couldn't load" in Jay's Chrome (RECURRING x3 - open, needs Jay's 10-second test)
+- **Date**: 2026-07-04, recurred 2026-07-05 (twice)
+- **Symptom**: Chrome shows generic "This page couldn't load" for hackathon-base-sage.vercel.app. Every single time, at the same moment from the same machine: curl gets HTTP 200 (fastest: 0.13s, full 34.7KB page). Vercel deployment Ready, runtime logs completely clean.
+- **Tried**: server verification 3x (always 200), Windows proxy registry (clean), hosts file (clean), Chrome enterprise policies (none), DNS A records (fine), Vercel runtime logs (zero errors).
+- **Root cause**: NOT the app, NOT the server, NOT Windows. Failure is Chrome-side. Suspects in order: (1) an extension intermittently blocking *.vercel.app (security/adblock extensions flag vercel.app because phishing kits get hosted there; filter lists update on their own schedule, which explains the on-off pattern), (2) Chrome "Secure DNS" (DoH) intermittently failing, (3) QUIC/HTTP-3 being blocked by router/ISP - Chrome uses QUIC, curl does not, which would exactly produce "browser fails, curl works".
+- **Fix**: pending the isolation test (below). App-side there is nothing to fix.
+- **Isolation (10 seconds each, stop when one works)**: (1) incognito Ctrl+Shift+N -> works? = extension, disable them one by one; (2) Edge -> works? = Chrome profile, turn off Secure DNS in Chrome settings; (3) both fail while curl works? = network blocks QUIC -> chrome://flags/#enable-quic -> Disabled -> relaunch.
+- **Prevention**: never debug this as an app issue - first command is `curl -s -o /dev/null -w "%{http_code}" <url>`; if 200, it is client-side. Do not redeploy or touch code for this symptom.
 
 ## 7. Itinerary always 1 day regardless of "Weekend"/"3 days" selection
 - **Date**: found 2026-07-05
