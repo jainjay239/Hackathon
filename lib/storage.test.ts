@@ -14,7 +14,7 @@ function makeGuide(destinationName: string): DestinationGuide {
     immersiveStory: "",
     localExperiences: [],
     localEtiquette: [],
-    itinerary: { morning: "", afternoon: "", evening: "" },
+    itinerary: [{ dayLabel: "Day 1", morning: "", afternoon: "", evening: "" }],
   };
 }
 
@@ -34,6 +34,17 @@ describe("parseSavedTrips", () => {
   it("parses a valid saved trips array", () => {
     const guide = makeGuide("Jaipur");
     expect(parseSavedTrips(JSON.stringify([guide]))).toEqual([guide]);
+  });
+
+  it("migrates legacy trips with a single-object itinerary to the day-array shape", () => {
+    const legacy = {
+      ...makeGuide("Kyoto"),
+      itinerary: { morning: "Fushimi Inari.", afternoon: "Tea ceremony.", evening: "Gion walk." },
+    };
+    const [migrated] = parseSavedTrips(JSON.stringify([legacy]));
+    expect(migrated.itinerary).toEqual([
+      { dayLabel: "Day 1", morning: "Fushimi Inari.", afternoon: "Tea ceremony.", evening: "Gion walk." },
+    ]);
   });
 });
 

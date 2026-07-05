@@ -34,15 +34,21 @@ export function isValidGuide(data: unknown): data is DestinationGuide {
   if (!Array.isArray(guide.localExperiences) || guide.localExperiences.length === 0) return false;
   if (!Array.isArray(guide.localEtiquette) || guide.localEtiquette.length === 0) return false;
 
-  const itinerary = guide.itinerary as Record<string, unknown> | undefined;
-  if (
-    !itinerary ||
-    !isNonEmptyString(itinerary.morning) ||
-    !isNonEmptyString(itinerary.afternoon) ||
-    !isNonEmptyString(itinerary.evening)
-  ) {
-    return false;
-  }
+  const itinerary = guide.itinerary;
+  if (!Array.isArray(itinerary) || itinerary.length === 0) return false;
+  return itinerary.every((day: Record<string, unknown>) => {
+    return (
+      day &&
+      isNonEmptyString(day.morning) &&
+      isNonEmptyString(day.afternoon) &&
+      isNonEmptyString(day.evening)
+    );
+  });
+}
 
-  return true;
+export function ensureDayLabels(itinerary: { dayLabel?: string; morning: string; afternoon: string; evening: string }[]) {
+  return itinerary.map((day, index) => ({
+    ...day,
+    dayLabel: day.dayLabel && day.dayLabel.length > 0 ? day.dayLabel : `Day ${index + 1}`,
+  }));
 }

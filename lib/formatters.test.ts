@@ -13,15 +13,19 @@ const guide: DestinationGuide = {
   immersiveStory: "",
   localExperiences: [],
   localEtiquette: [],
-  itinerary: { morning: "Visit Fushimi Inari.", afternoon: "Tea ceremony.", evening: "Gion district walk." },
+  itinerary: [
+    { dayLabel: "Day 1 - Temples", morning: "Visit Fushimi Inari.", afternoon: "Tea ceremony.", evening: "Gion district walk." },
+    { dayLabel: "Day 2 - Crafts", morning: "Nishijin weaving.", afternoon: "Pottery studio.", evening: "Kaiseki dinner." },
+  ],
 };
 
 describe("formatItinerary", () => {
-  it("includes destination, country, and all three time blocks", () => {
+  it("includes destination, country, day count, labels, and all time blocks", () => {
     const text = formatItinerary(guide);
-    expect(text).toContain("Kyoto, Japan");
+    expect(text).toContain("Kyoto, Japan - 2-Day Cultural Itinerary");
+    expect(text).toContain("Day 1 - Temples");
     expect(text).toContain("Morning: Visit Fushimi Inari.");
-    expect(text).toContain("Afternoon: Tea ceremony.");
-    expect(text).toContain("Evening: Gion district walk.");
+    expect(text).toContain("Day 2 - Crafts");
+    expect(text).toContain("Evening: Kaiseki dinner.");
   });
 });

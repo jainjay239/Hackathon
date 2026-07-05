@@ -42,7 +42,7 @@ const SIDEBAR_ITEMS: SidebarItem[] = [
   { id: "festivals", label: "Festivals" },
   { id: "experiences", label: "Experiences" },
   { id: "etiquette", label: "Etiquette" },
-  { id: "itinerary", label: "1-day itinerary" },
+  { id: "itinerary", label: "Itinerary" },
 ];
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
@@ -275,47 +275,60 @@ export function DestinationGuideView({
             </section>
 
             <section id="itinerary" className="scroll-mt-20">
-              <SectionHeading>1-day cultural itinerary</SectionHeading>
-              <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-base">
-                      <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
-                        <Sunrise className="size-4" aria-hidden="true" />
-                      </span>
-                      Morning
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm leading-relaxed text-foreground/80">{guide.itinerary.morning}</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-base">
-                      <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
-                        <Sun className="size-4" aria-hidden="true" />
-                      </span>
-                      Afternoon
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm leading-relaxed text-foreground/80">{guide.itinerary.afternoon}</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-base">
-                      <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
-                        <Sunset className="size-4" aria-hidden="true" />
-                      </span>
-                      Evening
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm leading-relaxed text-foreground/80">{guide.itinerary.evening}</p>
-                  </CardContent>
-                </Card>
+              <SectionHeading>
+                {guide.itinerary.length > 1
+                  ? `${guide.itinerary.length}-day cultural itinerary`
+                  : "1-day cultural itinerary"}
+              </SectionHeading>
+              <div className="mt-4 flex flex-col gap-8">
+                {guide.itinerary.map((day) => (
+                  <div key={day.dayLabel}>
+                    {guide.itinerary.length > 1 && (
+                      <h3 className="mb-3 text-base font-semibold text-foreground">{day.dayLabel}</h3>
+                    )}
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2 text-base">
+                            <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                              <Sunrise className="size-4" aria-hidden="true" />
+                            </span>
+                            Morning
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm leading-relaxed text-foreground/80">{day.morning}</p>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2 text-base">
+                            <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                              <Sun className="size-4" aria-hidden="true" />
+                            </span>
+                            Afternoon
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm leading-relaxed text-foreground/80">{day.afternoon}</p>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2 text-base">
+                            <span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                              <Sunset className="size-4" aria-hidden="true" />
+                            </span>
+                            Evening
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm leading-relaxed text-foreground/80">{day.evening}</p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                ))}
               </div>
 
               <div className="mt-6 flex flex-wrap gap-3">

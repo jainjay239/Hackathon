@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extractJson, isValidGuide } from "./gemini-response";
+import { ensureDayLabels, extractJson, isValidGuide } from "./gemini-response";
 import type { DestinationGuide } from "./types";
 
 const validGuide: DestinationGuide = {
@@ -15,7 +15,10 @@ const validGuide: DestinationGuide = {
   immersiveStory: "Walking through the old city at dusk...",
   localExperiences: [{ title: "Block printing workshop", description: "Try it yourself." }],
   localEtiquette: ["Remove shoes before entering temples."],
-  itinerary: { morning: "Visit the fort.", afternoon: "Explore the bazaar.", evening: "Watch the sunset." },
+  itinerary: [
+    { dayLabel: "Day 1", morning: "Visit the fort.", afternoon: "Explore the bazaar.", evening: "Watch the sunset." },
+    { dayLabel: "Day 2", morning: "Stepwell visit.", afternoon: "Block printing.", evening: "Folk dance show." },
+  ],
 };
 
 describe("extractJson", () => {
@@ -55,9 +58,30 @@ describe("isValidGuide", () => {
     expect(isValidGuide({ ...validGuide, cultureAtAGlance: [] })).toBe(false);
   });
 
-  it("rejects a guide with an incomplete itinerary", () => {
+  it("rejects a guide with an incomplete itinerary day", () => {
     expect(
-      isValidGuide({ ...validGuide, itinerary: { morning: "Visit the fort." } })
+      isValidGuide({ ...validGuide, itinerary: [{ morning: "Visit the fort." }] })
     ).toBe(false);
+  });
+
+  it("rejects a guide with an empty itinerary array", () => {
+    expect(isValidGuide({ ...validGuide, itinerary: [] })).toBe(false);
+  });
+
+  it("rejects the legacy single-object itinerary shape", () => {
+    expect(
+      isValidGuide({ ...validGuide, itinerary: { morning: "a", afternoon: "b", evening: "c" } })
+    ).toBe(false);
+  });
+});
+
+describe("ensureDayLabels", () => {
+  it("fills in missing day labels by position", () => {
+    const result = ensureDayLabels([
+      { morning: "a", afternoon: "b", evening: "c" },
+      { dayLabel: "Day 2 - Old City", morning: "d", afternoon: "e", evening: "f" },
+    ]);
+    expect(result[0].dayLabel).toBe("Day 1");
+    expect(result[1].dayLabel).toBe("Day 2 - Old City");
   });
 });

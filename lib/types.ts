@@ -25,6 +25,13 @@ export interface LocalExperience {
   description: string;
 }
 
+export interface ItineraryDay {
+  dayLabel: string;
+  morning: string;
+  afternoon: string;
+  evening: string;
+}
+
 export interface DestinationGuide {
   destinationName: string;
   country: string;
@@ -36,5 +43,5 @@ export interface DestinationGuide {
   immersiveStory: string;
   localExperiences: LocalExperience[];
   localEtiquette: string[];
-  itinerary: { morning: string; afternoon: string; evening: string };
+  itinerary: ItineraryDay[];
 }

@@ -26,7 +26,7 @@ const guide: DestinationGuide = {
     { title: "Block printing workshop", description: "Learn the craft from an artisan." },
   ],
   localEtiquette: ["Remove shoes before entering temples."],
-  itinerary: { morning: "", afternoon: "", evening: "" },
+  itinerary: [{ dayLabel: "Day 1", morning: "", afternoon: "", evening: "" }],
 };
 
 describe("filterGlanceByType", () => {
