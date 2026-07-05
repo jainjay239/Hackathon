@@ -46,7 +46,7 @@ export function DestinationImage({
   type,
   query,
   label,
-  className = "aspect-video",
+  className,
   children,
 }: {
   type: GlanceType;
@@ -61,7 +61,7 @@ export function DestinationImage({
   const showImage = Boolean(src) && !errored;
 
   return (
-    <div className={cn("relative w-full overflow-hidden rounded-lg", className)}>
+    <div className={cn("relative aspect-video w-full overflow-hidden rounded-lg", className)}>
       {showImage ? (
         <Image
           src={src as string}
